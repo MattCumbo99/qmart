@@ -13,6 +13,6 @@ class AuthController(
 ) {
     @PostMapping("/check-password")
     fun checkPassword(@RequestBody req: PasswordCheckRequest): Boolean {
-        return userService.passwordMatches(req.username, req.password)
+        return userService.passwordMatches(req.username, req.rawPassword)
     }
 }
