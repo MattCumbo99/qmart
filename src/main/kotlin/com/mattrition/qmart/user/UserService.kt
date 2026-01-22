@@ -16,10 +16,12 @@ class UserService(
 
     fun getAllUsers(): List<User> = repo.findAll()
 
-    fun getUserByUsername(username: String): User? = repo.findByUsername(username)
+    fun getUserByUsername(username: String): User? {
+        return repo.findByUsernameIgnoreCase(username)
+    }
 
     fun passwordMatches(username: String, rawPassword: String): Boolean {
-        val user = repo.findByUsername(username) ?: return false
+        val user = repo.findByUsernameIgnoreCase(username) ?: return false
 
         return passwordEncoder.matches(rawPassword, user.passwordHash)
     }
