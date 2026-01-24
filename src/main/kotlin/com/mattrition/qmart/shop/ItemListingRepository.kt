@@ -5,4 +5,8 @@ import java.util.UUID
 
 interface ItemListingRepository : JpaRepository<ItemListing, Long> {
     fun findItemListingById(id: UUID): ItemListing?
+
+    fun findItemListingsBySellerId(id: UUID): List<ItemListing>
+
+    fun deleteItemListingById(id: UUID)
 }

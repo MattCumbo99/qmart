@@ -13,13 +13,11 @@ class UserController(
     private val service: UserService
 ) {
     @GetMapping
-    fun getUsers(): List<User> = service.getAllUsers()
+    fun getUsers(): List<UserDto> = service.getAllUsers()
 
     @GetMapping("/{username}")
-    fun getUser(@PathVariable username: String): User? = service.getUserByUsername(username)
+    fun getUser(@PathVariable username: String): UserDto? = service.getUserByUsername(username)
 
     @PostMapping
-    fun createUser(@RequestBody user: RegisterUser): User {
-        return service.createUser(user)
-    }
+    fun createUser(@RequestBody registerInfo: RegisterUser): UserDto = service.createUser(registerInfo)
 }
