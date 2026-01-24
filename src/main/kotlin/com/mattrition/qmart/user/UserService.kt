@@ -2,6 +2,7 @@ package com.mattrition.qmart.user
 
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
+import java.util.UUID
 
 @Service
 class UserService(
@@ -19,6 +20,8 @@ class UserService(
 
         return userEntity.toDto()
     }
+
+    fun getUserById(id: UUID): UserDto? = repo.findById(id)?.toDto()
 
     fun getAllUsers(): List<UserDto> = repo.findAll().map { it.toDto() }
 
