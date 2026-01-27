@@ -4,4 +4,5 @@ object UserRole {
     const val USER = "user"
     const val MODERATOR = "moderator"
     const val ADMIN = "admin"
+    const val SUPERADMIN = "superadmin"
 }

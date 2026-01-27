@@ -9,7 +9,7 @@ import java.util.Date
 @Component
 class JwtUtil {
 
-    private val secret = "change-secret-key"
+    private val secret = "1d2i0jf0923thg91wd1uegh03hth13irh9fj31h12rh129"
     private val key = Keys.hmacShaKeyFor(secret.toByteArray())
 
     fun generateToken(username: String): String {

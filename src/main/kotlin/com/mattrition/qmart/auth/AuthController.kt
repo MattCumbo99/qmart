@@ -1,6 +1,6 @@
 package com.mattrition.qmart.auth
 
-import com.mattrition.qmart.user.UserService
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -9,10 +9,12 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/api/auth")
 class AuthController(
-    private val userService: UserService
+    private val authService: AuthService
 ) {
-    @PostMapping("/check-password")
-    fun checkPassword(@RequestBody req: PasswordCheckRequest): Boolean {
-        return userService.passwordMatches(req.username, req.rawPassword)
+    @PostMapping("/login")
+    fun login(@RequestBody loginReq: LoginRequest): ResponseEntity<LoginResponse> {
+        val res = authService.login(loginReq.username, loginReq.rawPassword)
+
+        return ResponseEntity.ok(res)
     }
 }
