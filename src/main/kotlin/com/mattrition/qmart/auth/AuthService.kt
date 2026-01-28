@@ -18,7 +18,7 @@ class AuthService(
             throw RuntimeException("Invalid credentials.")
         }
 
-        val token = jwtUtil.generateToken(user.username)
+        val token = jwtUtil.generateToken(user.username, user.id!!, user.role)
 
         return LoginResponse(
             token = token,
