@@ -10,5 +10,5 @@ data class UserDto(
     val email: String?,
     val createdAt: LocalDateTime,
     val coinBalance: BigDecimal = BigDecimal.ZERO,
-    val role: String = UserRole.USER
+    val role: String = UserRole.USER,
 )

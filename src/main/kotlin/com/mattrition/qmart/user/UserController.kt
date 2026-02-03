@@ -11,17 +11,22 @@ import java.util.UUID
 @RestController
 @RequestMapping("/api/users")
 class UserController(
-    private val service: UserService
+    private val service: UserService,
 ) {
-    @GetMapping
-    fun getUsers(): List<UserDto> = service.getAllUsers()
+    @GetMapping fun getUsers(): List<UserDto> = service.getAllUsers()
 
     @GetMapping("/username={username}")
-    fun getUserByUsername(@PathVariable username: String): UserDto? = service.getUserByUsername(username)
+    fun getUserByUsername(
+        @PathVariable username: String,
+    ): UserDto? = service.getUserByUsername(username)
 
     @GetMapping("/{id}")
-    fun getUserById(@PathVariable id: UUID): UserDto? = service.getUserById(id)
+    fun getUserById(
+        @PathVariable id: UUID,
+    ): UserDto? = service.getUserById(id)
 
     @PostMapping
-    fun createUser(@RequestBody registerInfo: RegisterUser): UserDto = service.createUser(registerInfo)
+    fun createUser(
+        @RequestBody registerInfo: RegisterUser,
+    ): UserDto = service.createUser(registerInfo)
 }

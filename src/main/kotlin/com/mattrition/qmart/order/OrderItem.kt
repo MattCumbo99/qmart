@@ -16,18 +16,9 @@ data class OrderItem(
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "order_item_id")
     val orderItemId: UUID? = null,
-
-    @Column(name = "order_id", nullable = false)
-    val orderId: UUID? = null,
-
-    @Column(name = "listing_id", nullable = false)
-    val listingId: UUID? = null,
-
-    @Column(name = "seller_id", nullable = false)
-    val sellerId: UUID? = null,
-
+    @Column(name = "order_id", nullable = false) val orderId: UUID? = null,
+    @Column(name = "listing_id", nullable = false) val listingId: UUID? = null,
+    @Column(name = "seller_id", nullable = false) val sellerId: UUID? = null,
     val quantity: Int = 0,
-
-    @Column(name = "price_each")
-    val priceEach: BigDecimal = BigDecimal.ZERO,
+    @Column(name = "price_each") val priceEach: BigDecimal = BigDecimal.ZERO,
 )

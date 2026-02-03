@@ -3,5 +3,5 @@ package com.mattrition.qmart.user
 data class RegisterUser(
     val username: String,
     val rawPassword: String,
-    val email: String? = null
+    val email: String? = null,
 )

@@ -17,15 +17,8 @@ data class Order(
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "order_id")
     val orderId: UUID? = null,
-
-    @Column(name = "buyer_id", nullable = false)
-    val buyerId: UUID? = null,
-
+    @Column(name = "buyer_id", nullable = false) val buyerId: UUID? = null,
     val status: String = OrderStatus.PENDING,
-
-    @Column(name = "total_paid")
-    val totalPaid: BigDecimal = BigDecimal.ZERO,
-
-    @Column(name = "created_at")
-    val createdAt: LocalDateTime = LocalDateTime.now()
+    @Column(name = "total_paid") val totalPaid: BigDecimal = BigDecimal.ZERO,
+    @Column(name = "created_at") val createdAt: LocalDateTime = LocalDateTime.now(),
 )
