@@ -12,21 +12,27 @@ import java.util.UUID
 @RestController
 @RequestMapping("/api/item-listings")
 class ItemListingController(
-    private val service: ItemListingService
+    private val service: ItemListingService,
 ) {
-    @GetMapping
-    fun getItemListings(): List<ItemListing> = service.getAllListings()
+    @GetMapping fun getItemListings(): List<ItemListing> = service.getAllListings()
 
     @GetMapping("/seller={sellerUsername}")
-    fun getItemListingsByUsername(@PathVariable sellerUsername: String): List<ItemListing> =
-        service.getListingByUsername(sellerUsername)
+    fun getItemListingsByUsername(
+        @PathVariable sellerUsername: String,
+    ): List<ItemListing> = service.getListingByUsername(sellerUsername)
 
     @GetMapping("/{listingId}")
-    fun getItemListing(@PathVariable listingId: UUID): ItemListing? = service.getListingById(listingId)
+    fun getItemListing(
+        @PathVariable listingId: UUID,
+    ): ItemListing? = service.getListingById(listingId)
 
     @PostMapping
-    fun createListing(@RequestBody itemListing: ItemListing): ItemListing = service.createListing(itemListing)
+    fun createListing(
+        @RequestBody itemListing: ItemListing,
+    ): ItemListing = service.createListing(itemListing)
 
     @DeleteMapping("/{listingId}")
-    fun deleteListingById(@PathVariable listingId: UUID) = service.deleteListingById(listingId)
+    fun deleteListingById(
+        @PathVariable listingId: UUID,
+    ) = service.deleteListingById(listingId)
 }

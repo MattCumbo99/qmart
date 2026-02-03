@@ -13,10 +13,7 @@ import org.springframework.security.web.SecurityFilterChain
 class SecurityDisableConfig {
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
-        http
-            .csrf { it.disable() }
-            .authorizeHttpRequests { it.anyRequest().permitAll() }
+        http.csrf { it.disable() }.authorizeHttpRequests { it.anyRequest().permitAll() }
         return http.build()
     }
-
 }

@@ -7,7 +7,7 @@ import java.util.UUID
 @Service
 class ItemListingService(
     private val repo: ItemListingRepository,
-    private val userRepo: UserRepository
+    private val userRepo: UserRepository,
 ) {
     fun getAllListings(): List<ItemListing> = repo.findAll()
 

@@ -24,22 +24,11 @@ import java.util.UUID
 @Entity
 @Table(name = "users")
 data class User(
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    val id: UUID? = null,
-
+    @Id @GeneratedValue(strategy = GenerationType.AUTO) val id: UUID? = null,
     val username: String = "",
-
-    @Column(name = "password_hash")
-    val passwordHash: String = "",
-
-    @Column(name = "created_at")
-    val createdAt: LocalDateTime = LocalDateTime.now(),
-
+    @Column(name = "password_hash") val passwordHash: String = "",
+    @Column(name = "created_at") val createdAt: LocalDateTime = LocalDateTime.now(),
     val email: String? = null,
-
-    @Column(name = "coin_balance")
-    val coinBalance: BigDecimal = BigDecimal.ZERO,
-
-    val role: String = UserRole.USER
+    @Column(name = "coin_balance") val coinBalance: BigDecimal = BigDecimal.ZERO,
+    val role: String = UserRole.USER,
 )
