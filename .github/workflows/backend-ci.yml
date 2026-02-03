@@ -1,0 +1,49 @@
+name: PR Checks
+
+on: pull_request
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Set up JDK
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 22
+
+      - name: Configure DB credentials
+        env:
+          DB_URL: ${{ secrets.DB_URL }}
+          DB_USERNAME: ${{ secrets.DB_USERNAME }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+        run: |
+          echo "SPRING_DATASOURCE_URL=$SPRING_DATASOURCE_URL" >> $GITHUB_ENV
+          echo "SPRING_DATASOURCE_USERNAME=$SPRING_DATASOURCE_USERNAME" >> $GITHUB_ENV
+          echo "SPRING_DATASOURCE_PASSWORD=$SPRING_DATASOURCE_PASSWORD" >> $GITHUB_ENV
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+      - name: Build project
+        run: ./gradlew build --no-daemon
+
+  spotless:
+    name: Spotless Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Set up JDK
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 22
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+
+      - name: Spotless Check
+        run: ./gradlew spotlessCheck --no-daemon
