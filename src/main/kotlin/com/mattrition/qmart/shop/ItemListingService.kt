@@ -11,7 +11,7 @@ class ItemListingService(
 ) {
     fun getAllListings(): List<ItemListing> = repo.findAll()
 
-    fun getListingById(id: UUID): ItemListing? = repo.findItemListingById(id)
+    fun getListingById(id: UUID): ItemListing? = repo.findById(id)?.get()
 
     fun getListingByUsername(username: String): List<ItemListing> {
         val userId = userRepo.findByUsernameIgnoreCase(username)?.id ?: return emptyList()
