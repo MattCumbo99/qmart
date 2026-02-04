@@ -9,7 +9,7 @@ to manage the local database.
 ```
 https://github.com/MattCumbo99/qmart.git
 ```
-2. Setup your PostgreSQL database using the schema provided in `src/main/resources/db/schema.sql`.
+2. Setup your PostgreSQL database using the schemas provided in `src/main/resources/db/migration/`.
 3. Create a run configuration for the application. There are three environment variables you must provide:
 ```
 DB_URL=jdbc:postgresql://localhost:5432/qmartdb
