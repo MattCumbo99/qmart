@@ -15,19 +15,25 @@ import java.util.UUID
 class CartItemController(
     private val cartService: CartItemService,
 ) {
-    @GetMapping("/userid={userId}")
+    @GetMapping("/user/{userId}")
     fun getCartItemsByUserId(
         @PathVariable userId: UUID,
     ): List<CartItemWithListingDto> = cartService.getCartItemsByUserId(userId)
 
-    @PostMapping("/userid={userId}")
+    @PostMapping("/user/{userId}")
     fun addItemToCart(
         @PathVariable userId: UUID,
         @RequestBody listing: ItemListingDto,
     ): CartItemWithListingDto = cartService.addItemToCart(userId, listing, itemQuantity = 1)
 
-    @DeleteMapping("/userid={userId}")
+    @DeleteMapping("/user/{userId}")
     fun clearCartItems(
         @PathVariable userId: UUID,
     ) = cartService.deleteCartItemsByUserId(userId)
+
+    @DeleteMapping("/user/{userId}/listing/{listingId}")
+    fun deleteCartItemFromUser(
+        @PathVariable userId: UUID,
+        @PathVariable listingId: UUID,
+    ) = cartService.deleteCartItemFromUser(userId, listingId)
 }

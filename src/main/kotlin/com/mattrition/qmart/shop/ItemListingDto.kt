@@ -4,7 +4,7 @@ import java.math.BigDecimal
 import java.util.UUID
 
 data class ItemListingDto(
-    val id: UUID,
+    val id: UUID? = null,
     val title: String,
     val description: String,
     val price: BigDecimal,

@@ -4,6 +4,7 @@ import com.mattrition.qmart.shop.ItemListingDto
 import com.mattrition.qmart.shop.ItemListingRepository
 import com.mattrition.qmart.shop.toDto
 import com.mattrition.qmart.user.UserRepository
+import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 import java.util.UUID
 
@@ -37,7 +38,14 @@ class CartItemService(
     }
 
     /** Clears items associated with a user ID. */
+    @Transactional
     fun deleteCartItemsByUserId(userId: UUID) = cartItemRepo.deleteCartItemsByUserId(userId)
+
+    @Transactional
+    fun deleteCartItemFromUser(
+        userId: UUID,
+        listingId: UUID,
+    ) = cartItemRepo.deleteByUserIdAndListingId(userId, listingId)
 
     /**
      * Creates a new cart item entry in the database. If the listing already exists under the

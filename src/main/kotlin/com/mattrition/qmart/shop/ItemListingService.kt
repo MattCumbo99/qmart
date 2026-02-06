@@ -1,6 +1,7 @@
 package com.mattrition.qmart.shop
 
 import com.mattrition.qmart.user.UserRepository
+import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 import java.util.UUID
 
@@ -29,7 +30,7 @@ class ItemListingService(
         return itemListingRepo.findItemListingsBySellerId(userId).map { it.toDto(username) }
     }
 
-    fun deleteListingById(id: UUID) = itemListingRepo.deleteItemListingById(id)
+    @Transactional fun deleteListingById(id: UUID) = itemListingRepo.deleteItemListingById(id)
 
     fun createListing(itemListing: ItemListingDto): ItemListingDto {
         val listingEntry =

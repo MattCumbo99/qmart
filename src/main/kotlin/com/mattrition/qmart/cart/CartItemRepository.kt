@@ -7,4 +7,9 @@ interface CartItemRepository : JpaRepository<CartItem, UUID> {
     fun findCartItemsByUserId(userId: UUID): List<CartItem>
 
     fun deleteCartItemsByUserId(userId: UUID)
+
+    fun deleteByUserIdAndListingId(
+        userId: UUID,
+        listingId: UUID,
+    )
 }
