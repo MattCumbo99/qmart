@@ -6,10 +6,5 @@ import java.util.UUID
 interface CartItemRepository : JpaRepository<CartItem, UUID> {
     fun findCartItemsByUserId(userId: UUID): List<CartItem>
 
-    fun findCartItemByUserIdAndListingId(
-        userId: UUID,
-        listingId: UUID,
-    ): CartItem?
-
     fun deleteCartItemsByUserId(userId: UUID)
 }
