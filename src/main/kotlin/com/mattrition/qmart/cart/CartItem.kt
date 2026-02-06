@@ -11,9 +11,11 @@ import java.util.UUID
 @Entity
 @Table(name = "cart_items")
 data class CartItem(
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column("cart_item_id") val cartItemId: UUID? = null,
-    @Column("user_id") val userId: UUID,
-    @Column("listing_id") val listingId: UUID,
-    val quantity: Int
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column("cart_item_id")
+    val cartItemId: UUID? = null,
+    @Column("user_id") val userId: UUID? = null,
+    @Column("listing_id") val listingId: UUID? = null,
+    val quantity: Int = 1,
 )

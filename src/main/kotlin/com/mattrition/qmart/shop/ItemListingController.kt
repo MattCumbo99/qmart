@@ -14,22 +14,22 @@ import java.util.UUID
 class ItemListingController(
     private val service: ItemListingService,
 ) {
-    @GetMapping fun getItemListings(): List<ItemListing> = service.getAllListings()
+    @GetMapping fun getItemListings(): List<ItemListingDto> = service.getAllListings()
 
     @GetMapping("/seller={sellerUsername}")
     fun getItemListingsByUsername(
         @PathVariable sellerUsername: String,
-    ): List<ItemListing> = service.getListingByUsername(sellerUsername)
+    ): List<ItemListingDto> = service.getListingsByUsername(sellerUsername)
 
     @GetMapping("/{listingId}")
     fun getItemListing(
         @PathVariable listingId: UUID,
-    ): ItemListing? = service.getListingById(listingId)
+    ): ItemListingDto? = service.getListingById(listingId)
 
     @PostMapping
     fun createListing(
-        @RequestBody itemListing: ItemListing,
-    ): ItemListing = service.createListing(itemListing)
+        @RequestBody itemListing: ItemListingDto,
+    ): ItemListingDto = service.createListing(itemListing)
 
     @DeleteMapping("/{listingId}")
     fun deleteListingById(
