@@ -1,9 +1,9 @@
 CREATE TABLE cart_items
 (
-    user_id      CHAR(36)                           NOT NULL,
-    listing_id   CHAR(36)                           NOT NULL,
+    user_id      UUID                           NOT NULL,
+    listing_id   UUID                           NOT NULL,
     quantity     INTEGER  DEFAULT 1                 NOT NULL,
-    cart_item_id CHAR(36) DEFAULT gen_random_uuid() NOT NULL,
+    cart_item_id UUID DEFAULT gen_random_uuid() NOT NULL,
     CONSTRAINT cart_items_pkey PRIMARY KEY (cart_item_id)
 );
 

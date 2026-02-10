@@ -1,22 +1,22 @@
 CREATE TABLE item_listings
 (
-    seller_id   CHAR(36)                                              NOT NULL,
+    seller_id   UUID                                              NOT NULL,
     title       VARCHAR(200)                                          NOT NULL,
     description TEXT,
     price       numeric(10, 2)                                        NOT NULL,
     image_url   TEXT,
     created_at  TIMESTAMP WITHOUT TIME ZONE DEFAULT NOW()             NOT NULL,
     updated_at  TIMESTAMP WITHOUT TIME ZONE DEFAULT NOW()             NOT NULL,
-    id          CHAR(36)                    DEFAULT gen_random_uuid() NOT NULL,
+    id          UUID                    DEFAULT gen_random_uuid() NOT NULL,
     CONSTRAINT item_listings_pkey PRIMARY KEY (id)
 );
 
 CREATE TABLE order_items
 (
-    order_item_id CHAR(36) DEFAULT gen_random_uuid() NOT NULL,
-    order_id      CHAR(36)                           NOT NULL,
-    listing_id    CHAR(36)                           NOT NULL,
-    seller_id     CHAR(36)                           NOT NULL,
+    order_item_id UUID DEFAULT gen_random_uuid() NOT NULL,
+    order_id      UUID                           NOT NULL,
+    listing_id    UUID                           NOT NULL,
+    seller_id     UUID                           NOT NULL,
     quantity      INTEGER                            NOT NULL,
     price_each    numeric(10, 2)                     NOT NULL,
     CONSTRAINT order_items_pkey PRIMARY KEY (order_item_id)
@@ -24,9 +24,9 @@ CREATE TABLE order_items
 
 CREATE TABLE orders
 (
-    buyer_id   CHAR(36)                                              NOT NULL,
+    buyer_id   UUID                                              NOT NULL,
     created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT NOW()             NOT NULL,
-    order_id   CHAR(36)                    DEFAULT gen_random_uuid() NOT NULL,
+    order_id   UUID                    DEFAULT gen_random_uuid() NOT NULL,
     status     VARCHAR(50)                 DEFAULT 'pending'         NOT NULL,
     total_paid numeric(10, 2)                                        NOT NULL,
     CONSTRAINT orders_pkey PRIMARY KEY (order_id)
@@ -38,7 +38,7 @@ CREATE TABLE users
     password_hash VARCHAR(255)                                          NOT NULL,
     created_at    TIMESTAMP WITHOUT TIME ZONE DEFAULT NOW(),
     email         VARCHAR(255),
-    id            CHAR(36)                    DEFAULT gen_random_uuid() NOT NULL,
+    id            UUID                    DEFAULT gen_random_uuid() NOT NULL,
     coin_balance  numeric(12, 2)              DEFAULT 0                 NOT NULL,
     role          VARCHAR(50)                 DEFAULT 'user'            NOT NULL,
     CONSTRAINT users_pkey PRIMARY KEY (id)
