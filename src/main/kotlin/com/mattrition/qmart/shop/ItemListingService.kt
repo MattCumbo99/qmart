@@ -1,25 +1,47 @@
 package com.mattrition.qmart.shop
 
 import com.mattrition.qmart.user.UserRepository
+import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 import java.util.UUID
 
 @Service
 class ItemListingService(
-    private val repo: ItemListingRepository,
+    private val itemListingRepo: ItemListingRepository,
     private val userRepo: UserRepository,
 ) {
-    fun getAllListings(): List<ItemListing> = repo.findAll()
+    fun getAllListings(): List<ItemListingDto> =
+        itemListingRepo.findAll().map { listing ->
+            val sellerUsername = userRepo.findById(listing.sellerId!!).get().username
 
-    fun getListingById(id: UUID): ItemListing? = repo.findItemListingById(id)
+            listing.toDto(sellerUsername)
+        }
 
-    fun getListingByUsername(username: String): List<ItemListing> {
-        val userId = userRepo.findByUsernameIgnoreCase(username)?.id ?: return emptyList()
+    fun getListingById(id: UUID): ItemListingDto? {
+        val listing = itemListingRepo.findById(id)?.get() ?: return null
+        val sellerUsername = userRepo.findById(listing.sellerId!!).get().username
 
-        return repo.findItemListingsBySellerId(userId)
+        return listing.toDto(sellerUsername)
     }
 
-    fun deleteListingById(id: UUID) = repo.deleteItemListingById(id)
+    fun getListingsByUsername(username: String): List<ItemListingDto> {
+        val userId = userRepo.findByUsernameIgnoreCase(username)?.id ?: return emptyList()
 
-    fun createListing(itemListing: ItemListing): ItemListing = repo.save(itemListing)
+        return itemListingRepo.findItemListingsBySellerId(userId).map { it.toDto(username) }
+    }
+
+    @Transactional fun deleteListingById(id: UUID) = itemListingRepo.deleteItemListingById(id)
+
+    fun createListing(itemListing: ItemListingDto): ItemListingDto {
+        val listingEntry =
+            ItemListing(
+                sellerId = itemListing.sellerId,
+                title = itemListing.title,
+                description = itemListing.description,
+                price = itemListing.price,
+                imageUrl = itemListing.imageUrl,
+            )
+
+        return itemListingRepo.save(listingEntry).toDto(itemListing.sellerUsername)
+    }
 }

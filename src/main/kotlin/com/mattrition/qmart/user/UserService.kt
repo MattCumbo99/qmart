@@ -9,7 +9,7 @@ class UserService(
     private val repo: UserRepository,
     private val passwordEncoder: PasswordEncoder,
 ) {
-    fun createUser(registerInfo: RegisterUser): UserDto {
+    fun createUser(registerInfo: RegistrationInfo): UserDto {
         val userEntity =
             repo.save(
                 User(
@@ -22,7 +22,7 @@ class UserService(
         return userEntity.toDto()
     }
 
-    fun getUserById(id: UUID): UserDto? = repo.findById(id)?.toDto()
+    fun getUserById(id: UUID): UserDto? = repo.findById(id)?.get()?.toDto()
 
     fun getAllUsers(): List<UserDto> = repo.findAll().map { it.toDto() }
 

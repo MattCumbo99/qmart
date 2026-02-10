@@ -18,7 +18,7 @@ data class ItemListing(
     val title: String = "",
     val description: String = "",
     val price: BigDecimal = BigDecimal.ZERO,
-    @Column(name = "image_url") val imageUrl: String = "",
+    @Column(name = "image_url") val imageUrl: String? = null,
     @Column(name = "created_at") val createdAt: LocalDateTime = LocalDateTime.now(),
     @Column(name = "updated_at") val updatedAt: LocalDateTime = LocalDateTime.now(),
 )

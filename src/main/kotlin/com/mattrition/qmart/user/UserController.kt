@@ -27,6 +27,6 @@ class UserController(
 
     @PostMapping
     fun createUser(
-        @RequestBody registerInfo: RegisterUser,
+        @RequestBody registerInfo: RegistrationInfo,
     ): UserDto = service.createUser(registerInfo)
 }
