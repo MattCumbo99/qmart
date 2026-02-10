@@ -19,4 +19,4 @@ ALTER TABLE cart_items
 ALTER TABLE cart_items
     ADD CONSTRAINT quantity_check CHECK (quantity > 0);
 
-DROP TYPE user_role;
+DROP TYPE IF EXISTS user_role;
