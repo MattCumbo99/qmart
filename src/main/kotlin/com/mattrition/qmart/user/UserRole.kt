@@ -1,8 +1,8 @@
 package com.mattrition.qmart.user
 
 object UserRole {
-    const val USER = "user"
-    const val MODERATOR = "moderator"
-    const val ADMIN = "admin"
-    const val SUPERADMIN = "superadmin"
+    const val USER = "USER"
+    const val MODERATOR = "MODERATOR"
+    const val ADMIN = "ADMIN"
+    const val SUPERADMIN = "SUPERADMIN"
 }

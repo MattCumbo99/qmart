@@ -1,5 +1,7 @@
 package com.mattrition.qmart.user
 
+import com.mattrition.qmart.user.dto.RegistrationInfo
+import com.mattrition.qmart.user.dto.UserDto
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import java.util.UUID

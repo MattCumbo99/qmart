@@ -1,5 +1,8 @@
 package com.mattrition.qmart.user
 
+import com.mattrition.qmart.user.dto.RegistrationInfo
+import com.mattrition.qmart.user.dto.UserDto
+import jakarta.annotation.security.RolesAllowed
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -13,7 +16,9 @@ import java.util.UUID
 class UserController(
     private val service: UserService,
 ) {
-    @GetMapping fun getUsers(): List<UserDto> = service.getAllUsers()
+    @RolesAllowed(UserRole.MODERATOR)
+    @GetMapping
+    fun getUsers(): List<UserDto> = service.getAllUsers()
 
     @GetMapping("/username={username}")
     fun getUserByUsername(

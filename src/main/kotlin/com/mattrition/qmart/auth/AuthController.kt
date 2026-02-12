@@ -1,5 +1,7 @@
 package com.mattrition.qmart.auth
 
+import com.mattrition.qmart.auth.dto.LoginRequest
+import com.mattrition.qmart.auth.dto.LoginResponse
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody

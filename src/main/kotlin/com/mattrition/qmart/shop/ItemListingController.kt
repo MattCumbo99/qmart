@@ -1,5 +1,8 @@
 package com.mattrition.qmart.shop
 
+import com.mattrition.qmart.shop.dto.ItemListingDto
+import com.mattrition.qmart.user.UserRole
+import jakarta.annotation.security.RolesAllowed
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -31,6 +34,10 @@ class ItemListingController(
         @RequestBody itemListing: ItemListingDto,
     ): ItemListingDto = service.createListing(itemListing)
 
+    // TODO This @RolesAllowed annotation should be removed eventually in favor of a business rule
+    //  which checks user role OR if the listing belongs to the user sending the
+    //  request.
+    @RolesAllowed(UserRole.MODERATOR)
     @DeleteMapping("/{listingId}")
     fun deleteListingById(
         @PathVariable listingId: UUID,

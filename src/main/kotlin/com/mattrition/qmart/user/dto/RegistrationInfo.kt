@@ -1,4 +1,4 @@
-package com.mattrition.qmart.user
+package com.mattrition.qmart.user.dto
 
 data class RegistrationInfo(
     val username: String,

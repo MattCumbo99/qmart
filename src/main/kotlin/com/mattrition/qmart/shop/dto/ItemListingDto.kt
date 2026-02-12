@@ -1,4 +1,4 @@
-package com.mattrition.qmart.shop
+package com.mattrition.qmart.shop.dto
 
 import java.math.BigDecimal
 import java.util.UUID

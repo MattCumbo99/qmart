@@ -1,8 +1,9 @@
 package com.mattrition.qmart.cart
 
-import com.mattrition.qmart.shop.ItemListingDto
+import com.mattrition.qmart.cart.dto.CartItemWithListingDto
 import com.mattrition.qmart.shop.ItemListingRepository
-import com.mattrition.qmart.shop.toDto
+import com.mattrition.qmart.shop.dto.ItemListingDto
+import com.mattrition.qmart.shop.dto.toDto
 import com.mattrition.qmart.user.UserRepository
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service

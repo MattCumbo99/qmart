@@ -1,6 +1,6 @@
-package com.mattrition.qmart.cart
+package com.mattrition.qmart.cart.dto
 
-import com.mattrition.qmart.shop.ItemListingDto
+import com.mattrition.qmart.shop.dto.ItemListingDto
 import java.util.UUID
 
 /**
