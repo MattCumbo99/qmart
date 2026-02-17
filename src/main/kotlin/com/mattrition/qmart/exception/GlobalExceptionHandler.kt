@@ -15,4 +15,7 @@ class GlobalExceptionHandler {
 
     @ExceptionHandler(BadRequestException::class)
     fun handleBadRequest(ex: BadRequestException): ErrorResponse = SimpleErrorResponse(HttpStatus.BAD_REQUEST, ex.message)
+
+    @ExceptionHandler(ConflictException::class)
+    fun handleConflict(ex: ConflictException): ErrorResponse = SimpleErrorResponse(HttpStatus.CONFLICT, ex.message)
 }

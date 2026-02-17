@@ -48,16 +48,16 @@ ALTER TABLE users
     ADD CONSTRAINT users_username_key UNIQUE (username);
 
 ALTER TABLE users
-    ADD CONSTRAINT user_role_check CHECK (role IN ('user', 'moderator', 'admin', 'superadmin'));
+    ADD CONSTRAINT users_user_role_check CHECK (role IN ('user', 'moderator', 'admin', 'superadmin'));
 
 ALTER TABLE users
-    ADD CONSTRAINT username_check CHECK (username ~ '^[A-Za-z0-9_-]+$');
+    ADD CONSTRAINT users_username_check CHECK (username ~ '^[A-Za-z0-9_-]+$');
 
 ALTER TABLE item_listings
     ADD CONSTRAINT item_listings_seller_id_fkey FOREIGN KEY (seller_id) REFERENCES users (id) ON DELETE CASCADE;
 
 ALTER TABLE item_listings
-    ADD CONSTRAINT price_check CHECK (price >= 0);
+    ADD CONSTRAINT item_listings_price_check CHECK (price >= 0);
 
 ALTER TABLE order_items
     ADD CONSTRAINT order_items_listing_id_fkey FOREIGN KEY (listing_id) REFERENCES item_listings (id) ON DELETE NO ACTION;
@@ -69,16 +69,16 @@ ALTER TABLE order_items
     ADD CONSTRAINT order_items_seller_id_fkey FOREIGN KEY (seller_id) REFERENCES users (id) ON DELETE NO ACTION;
 
 ALTER TABLE order_items
-    ADD CONSTRAINT price_check CHECK (price_each >= 0);
+    ADD CONSTRAINT order_items_price_check CHECK (price_each >= 0);
 
 ALTER TABLE order_items
-    ADD CONSTRAINT quantity_check CHECK (quantity > 0);
+    ADD CONSTRAINT order_items_quantity_check CHECK (quantity > 0);
 
 ALTER TABLE orders
     ADD CONSTRAINT orders_buyer_id_fkey FOREIGN KEY (buyer_id) REFERENCES users (id) ON DELETE CASCADE;
 
 ALTER TABLE orders
-    ADD CONSTRAINT order_status_check CHECK (status IN ('pending', 'completed'));
+    ADD CONSTRAINT orders_status_check CHECK (status IN ('pending', 'completed'));
 
 ALTER TABLE orders
-    ADD CONSTRAINT total_paid_check CHECK (total_paid >= 0);
+    ADD CONSTRAINT orders_total_paid_check CHECK (total_paid >= 0);

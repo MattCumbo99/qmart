@@ -3,6 +3,8 @@ package com.mattrition.qmart.user
 import com.mattrition.qmart.user.dto.RegistrationInfo
 import com.mattrition.qmart.user.dto.UserDto
 import jakarta.annotation.security.RolesAllowed
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -23,15 +25,19 @@ class UserController(
     @GetMapping("/username={username}")
     fun getUserByUsername(
         @PathVariable username: String,
-    ): UserDto? = service.getUserByUsername(username)
+    ): UserDto = service.getUserByUsername(username)
 
     @GetMapping("/{id}")
     fun getUserById(
         @PathVariable id: UUID,
-    ): UserDto? = service.getUserById(id)
+    ): UserDto = service.getUserById(id)
 
     @PostMapping
     fun createUser(
         @RequestBody registerInfo: RegistrationInfo,
-    ): UserDto = service.createUser(registerInfo)
+    ): ResponseEntity<UserDto> {
+        val saved = service.createUser(registerInfo)
+
+        return ResponseEntity(saved, HttpStatus.CREATED)
+    }
 }

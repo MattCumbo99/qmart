@@ -5,4 +5,6 @@ import java.util.UUID
 
 interface UserRepository : JpaRepository<User, UUID> {
     fun findByUsernameIgnoreCase(username: String): User?
+
+    fun existsByUsernameIgnoreCase(username: String): Boolean
 }

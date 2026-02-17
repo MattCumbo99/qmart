@@ -1,0 +1,26 @@
+[
+  {
+    "username": "Superadmin",
+    "password": "superAdmin!!!",
+    "email": "superadmin@qmart.com",
+    "role": "superadmin"
+  },
+  {
+    "username": "Admin",
+    "password": "admin",
+    "email": "admin@qmart.com",
+    "role": "admin"
+  },
+  {
+    "username": "Moderator",
+    "password": "moderator",
+    "email": "moderator@qmart.com",
+    "role": "moderator"
+  },
+  {
+    "username": "test_user123",
+    "password": "IloveToTravel!",
+    "email": "levyrosman@chess.com",
+    "role": "user"
+  }
+]
