@@ -1,5 +1,6 @@
-package com.mattrition.qmart.user
+package com.mattrition.qmart.user.dto
 
+import com.mattrition.qmart.user.UserRole
 import java.math.BigDecimal
 import java.time.LocalDateTime
 import java.util.UUID
@@ -10,5 +11,5 @@ data class UserDto(
     val email: String?,
     val createdAt: LocalDateTime,
     val coinBalance: BigDecimal = BigDecimal.ZERO,
-    val role: String = UserRole.USER,
+    val role: String = UserRole.USER.lowercase(),
 )

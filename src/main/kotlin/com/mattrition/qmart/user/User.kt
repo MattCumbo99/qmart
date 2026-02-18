@@ -30,5 +30,5 @@ data class User(
     @Column(name = "created_at") val createdAt: LocalDateTime = LocalDateTime.now(),
     val email: String? = null,
     @Column(name = "coin_balance") val coinBalance: BigDecimal = BigDecimal.ZERO,
-    val role: String = UserRole.USER,
+    val role: String = UserRole.USER.lowercase(),
 )

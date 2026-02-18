@@ -1,4 +1,6 @@
-package com.mattrition.qmart.shop
+package com.mattrition.qmart.shop.dto
+
+import com.mattrition.qmart.shop.ItemListing
 
 /** Converts this item listing into a data transfer object. */
 fun ItemListing.toDto(sellerUsername: String) =

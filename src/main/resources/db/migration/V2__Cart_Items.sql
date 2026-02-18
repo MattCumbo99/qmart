@@ -17,6 +17,6 @@ ALTER TABLE cart_items
     ADD CONSTRAINT cart_items_user_id_fkey FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE;
 
 ALTER TABLE cart_items
-    ADD CONSTRAINT quantity_check CHECK (quantity > 0);
+    ADD CONSTRAINT cart_items_quantity_check CHECK (quantity > 0);
 
 DROP TYPE IF EXISTS user_role;

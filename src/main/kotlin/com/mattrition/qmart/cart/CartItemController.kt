@@ -1,6 +1,8 @@
 package com.mattrition.qmart.cart
 
-import com.mattrition.qmart.shop.ItemListingDto
+import com.mattrition.qmart.cart.dto.CartItemWithListingDto
+import com.mattrition.qmart.shop.dto.ItemListingDto
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -15,22 +17,26 @@ import java.util.UUID
 class CartItemController(
     private val cartService: CartItemService,
 ) {
+    @PreAuthorize("#userId == authentication.principal.id")
     @GetMapping("/user/{userId}")
     fun getCartItemsByUserId(
         @PathVariable userId: UUID,
     ): List<CartItemWithListingDto> = cartService.getCartItemsByUserId(userId)
 
+    @PreAuthorize("#userId == authentication.principal.id")
     @PostMapping("/user/{userId}")
     fun addItemToCart(
         @PathVariable userId: UUID,
         @RequestBody listing: ItemListingDto,
     ): CartItemWithListingDto = cartService.addItemToCart(userId, listing, itemQuantity = 1)
 
+    @PreAuthorize("#userId == authentication.principal.id")
     @DeleteMapping("/user/{userId}")
     fun clearCartItems(
         @PathVariable userId: UUID,
     ) = cartService.deleteCartItemsByUserId(userId)
 
+    @PreAuthorize("#userId == authentication.principal.id")
     @DeleteMapping("/user/{userId}/listing/{listingId}")
     fun deleteCartItemFromUser(
         @PathVariable userId: UUID,
