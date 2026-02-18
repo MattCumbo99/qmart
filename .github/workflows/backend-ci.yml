@@ -4,7 +4,7 @@ on: pull_request
 
 jobs:
   build:
-    name: Build
+    name: Build and Test
     runs-on: ubuntu-latest
 
     steps:
@@ -29,7 +29,7 @@ jobs:
           echo "SPRING_DATASOURCE_PASSWORD=$SPRING_DATASOURCE_PASSWORD" >> $GITHUB_ENV
       - name: Make gradlew executable
         run: chmod +x ./gradlew
-      - name: Build project
+      - name: Build and test project
         run: ./gradlew build --no-daemon
 
   spotless:

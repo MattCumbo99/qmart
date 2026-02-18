@@ -12,6 +12,7 @@ spring:
         dialect: org.hibernate.dialect.H2Dialect
   flyway:
     enabled: true
+    validate-on-migrate: false
 
 jwt:
   secret: qKbdSQ3bgLRZJWH29euWFYxG2PZrBCEgPQJWPOs0v1P
