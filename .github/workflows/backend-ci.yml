@@ -21,6 +21,8 @@ jobs:
           DB_URL: ${{ secrets.DB_URL }}
           DB_USERNAME: ${{ secrets.DB_USERNAME }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          SPRING_PROFILES_ACTIVE: test
+          JWT_SECRET: qKbdSQ3bgLRZJWH29euWFYxG2PZrBCEgPQJWPOs0v1P
         run: |
           echo "SPRING_DATASOURCE_URL=$SPRING_DATASOURCE_URL" >> $GITHUB_ENV
           echo "SPRING_DATASOURCE_USERNAME=$SPRING_DATASOURCE_USERNAME" >> $GITHUB_ENV
@@ -28,9 +30,6 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x ./gradlew
       - name: Build project
-        env:
-          SPRING_PROFILES_ACTIVE: test
-          JWT_SECRET: qKbdSQ3bgLRZJWH29euWFYxG2PZrBCEgPQJWPOs0v1P
         run: ./gradlew build --no-daemon
 
   spotless:
