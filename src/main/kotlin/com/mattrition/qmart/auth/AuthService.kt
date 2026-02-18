@@ -2,7 +2,6 @@ package com.mattrition.qmart.auth
 
 import com.mattrition.qmart.auth.dto.LoginResponse
 import com.mattrition.qmart.exception.BadRequestException
-import com.mattrition.qmart.exception.NotFoundException
 import com.mattrition.qmart.user.UserRepository
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
@@ -19,7 +18,7 @@ class AuthService(
     ): LoginResponse {
         val user =
             userRepository.findByUsernameIgnoreCase(username)
-                ?: throw NotFoundException("User does not exist.")
+                ?: throw BadRequestException("Invalid credentials.")
 
         if (!passwordEncoder.matches(password, user.passwordHash)) {
             throw BadRequestException("Invalid credentials.")

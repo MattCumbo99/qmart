@@ -3,6 +3,8 @@ package com.mattrition.qmart.shop
 import com.mattrition.qmart.shop.dto.ItemListingDto
 import com.mattrition.qmart.user.UserRole
 import jakarta.annotation.security.RolesAllowed
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -29,10 +31,15 @@ class ItemListingController(
         @PathVariable listingId: UUID,
     ): ItemListingDto? = service.getListingById(listingId)
 
+    @RolesAllowed(UserRole.USER)
     @PostMapping
     fun createListing(
         @RequestBody itemListing: ItemListingDto,
-    ): ItemListingDto = service.createListing(itemListing)
+    ): ResponseEntity<ItemListingDto> {
+        val item = service.createListing(itemListing)
+
+        return ResponseEntity(item, HttpStatus.CREATED)
+    }
 
     // TODO This @RolesAllowed annotation should be removed eventually in favor of a business rule
     //  which checks user role OR if the listing belongs to the user sending the
