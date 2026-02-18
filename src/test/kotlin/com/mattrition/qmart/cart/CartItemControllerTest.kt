@@ -83,7 +83,7 @@ class CartItemControllerTest : BaseH2Test() {
                 path = "$BASE_PATH/user/${TestUsers.user.id}",
                 token = TestTokens.admin,
                 body = listing1Dto,
-            ).andExpect(status().isOk)
+            ).andExpect(status().isForbidden)
         }
 
         @Test
