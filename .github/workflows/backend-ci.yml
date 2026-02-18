@@ -15,18 +15,6 @@ jobs:
         with:
           distribution: temurin
           java-version: 22
-
-      - name: Configure DB credentials
-        env:
-          DB_URL: ${{ secrets.DB_URL }}
-          DB_USERNAME: ${{ secrets.DB_USERNAME }}
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          SPRING_PROFILES_ACTIVE: test
-          JWT_SECRET: qKbdSQ3bgLRZJWH29euWFYxG2PZrBCEgPQJWPOs0v1P
-        run: |
-          echo "SPRING_DATASOURCE_URL=$SPRING_DATASOURCE_URL" >> $GITHUB_ENV
-          echo "SPRING_DATASOURCE_USERNAME=$SPRING_DATASOURCE_USERNAME" >> $GITHUB_ENV
-          echo "SPRING_DATASOURCE_PASSWORD=$SPRING_DATASOURCE_PASSWORD" >> $GITHUB_ENV
       - name: Make gradlew executable
         run: chmod +x ./gradlew
       - name: Build and test project
