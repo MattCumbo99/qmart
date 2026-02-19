@@ -7,7 +7,7 @@ to manage the local database.
 
 1. Clone this repository:
 ```
-https://github.com/MattCumbo99/qmart.git
+https://github.com/Entropic-Field-Nine-Studios/qmart.git
 ```
 2. Setup your PostgreSQL database using the schemas provided in `src/main/resources/db/migration/`.
 3. Create a run configuration for the application. There are three environment variables you must provide:
