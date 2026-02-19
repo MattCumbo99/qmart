@@ -5,6 +5,7 @@ import com.mattrition.qmart.shop.ItemListing
 import com.mattrition.qmart.shop.ItemListingRepository
 import com.mattrition.qmart.shop.dto.ItemListingDto
 import com.mattrition.qmart.shop.dto.toDto
+import io.kotest.matchers.equals.shouldBeEqual
 import io.kotest.matchers.ints.shouldBeGreaterThan
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
@@ -100,6 +101,19 @@ class CartItemControllerTest : BaseH2Test() {
             val userItems = cartItemRepository.findCartItemsByUserId(TestUsers.superadmin.id!!)
             userItems.size shouldBe 1
             userItems.first().listingId shouldBe listing1.id
+        }
+
+        @Test
+        fun `user should not be able to add owned items to cart`() {
+            val ogItem = itemListingRepository.findById(listing1.id!!).getOrNull().shouldNotBeNull()
+            ogItem.sellerId.shouldNotBeNull() shouldBeEqual TestUsers.admin.id!!
+
+            mockRequest(
+                requestType = POST,
+                path = "$BASE_PATH/user/${TestUsers.admin.id}",
+                token = TestTokens.admin,
+                body = listing1Dto,
+            ).andExpect(status().isForbidden)
         }
     }
 

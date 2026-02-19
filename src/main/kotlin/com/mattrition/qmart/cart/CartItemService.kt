@@ -1,6 +1,7 @@
 package com.mattrition.qmart.cart
 
 import com.mattrition.qmart.cart.dto.CartItemWithListingDto
+import com.mattrition.qmart.exception.ForbiddenException
 import com.mattrition.qmart.shop.ItemListingRepository
 import com.mattrition.qmart.shop.dto.ItemListingDto
 import com.mattrition.qmart.shop.dto.toDto
@@ -57,6 +58,11 @@ class CartItemService(
         listingDto: ItemListingDto,
         itemQuantity: Int = 1,
     ): CartItemWithListingDto {
+        // Prevent users from adding items they are selling into their own cart
+        if (listingDto.sellerId == userId) {
+            throw ForbiddenException("User $userId owns listing ${listingDto.id}")
+        }
+
         val existingItem =
             cartItemRepo.findCartItemsByUserId(userId).firstOrNull { it.listingId == listingDto.id }
 
