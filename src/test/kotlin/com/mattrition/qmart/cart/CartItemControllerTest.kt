@@ -106,7 +106,9 @@ class CartItemControllerTest : BaseH2Test() {
         @Test
         fun `user should not be able to add owned items to cart`() {
             val ogItem = itemListingRepository.findById(listing1.id!!).getOrNull().shouldNotBeNull()
-            ogItem.sellerId.shouldNotBeNull() shouldBeEqual TestUsers.admin.id!!
+            val listingSellerId = ogItem.sellerId.shouldNotBeNull()
+            listingSellerId shouldBeEqual TestUsers.admin.id!!
+            listing1Dto.sellerId shouldBeEqual TestUsers.admin.id!!
 
             mockRequest(
                 requestType = POST,
