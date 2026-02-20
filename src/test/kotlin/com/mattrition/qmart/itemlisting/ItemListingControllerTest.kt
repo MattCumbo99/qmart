@@ -107,6 +107,12 @@ class ItemListingControllerTest : BaseH2Test() {
         }
 
         @Test
+        fun `should return 404 not found on non-existing user`() {
+            mockRequest(requestType = GET, path = "$BASE_PATH/seller=${UUID.randomUUID()}")
+                .andExpect(status().isNotFound)
+        }
+
+        @Test
         fun `should get all item listings`() {
             mockRequest(requestType = GET, path = BASE_PATH)
                 .andExpect(status().isOk)
@@ -118,6 +124,12 @@ class ItemListingControllerTest : BaseH2Test() {
             mockRequest(requestType = GET, path = "$BASE_PATH/${listing1.id}")
                 .andExpect(status().isOk)
                 .andExpect(jsonPath("$.id").value(listing1.id.toString()))
+        }
+
+        @Test
+        fun `should return 404 not found on unknown listing id`() {
+            mockRequest(requestType = GET, path = "$BASE_PATH/${UUID.randomUUID()}")
+                .andExpect(status().isNotFound)
         }
     }
 }

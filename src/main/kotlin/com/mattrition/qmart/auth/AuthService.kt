@@ -12,6 +12,12 @@ class AuthService(
     private val jwtService: JwtService,
     private val passwordEncoder: PasswordEncoder,
 ) {
+    /**
+     * Validates the provided credentials against a user in the database, then creates a new Java
+     * Web Token for the user.
+     *
+     * @throws BadRequestException If the username does not exist OR the password does not match.
+     */
     fun login(
         username: String,
         password: String,

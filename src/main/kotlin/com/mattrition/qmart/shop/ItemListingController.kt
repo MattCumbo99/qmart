@@ -29,7 +29,7 @@ class ItemListingController(
     @GetMapping("/{listingId}")
     fun getItemListing(
         @PathVariable listingId: UUID,
-    ): ItemListingDto? = service.getListingById(listingId)
+    ): ItemListingDto = service.getListingById(listingId)
 
     @RolesAllowed(UserRole.USER)
     @PostMapping
