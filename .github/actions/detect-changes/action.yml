@@ -7,6 +7,7 @@ runs:
       id: detect
       shell: bash
       run: |
+        git fetch origin HEAD --depth=2
         git fetch origin ${{ github.base_ref }}:${{ github.base_ref }} --depth=1
         CHANGED=$(git diff --name-only ${{ github.base_ref }}...HEAD)
         
