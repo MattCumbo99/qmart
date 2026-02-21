@@ -1,0 +1,20 @@
+name: detect-changes
+description: Detect whether relevant files changed
+runs:
+  using: composite
+  steps:
+    - name: Detect relevant changes
+      id: detect
+      shell: bash
+      run: |
+        git fetch origin ${{ github.base_ref }} --depth=1
+        CHANGED=$(git diff --name-only origin/${{ github.base_ref }} ... HEAD)
+        
+        echo "Changed files:"
+        echo "$CHANGED"
+        
+        if echo "$CHANGED" | grep -E "src/|build.gradle.kts|settings.gradle.kts" > /dev/null; then
+          echo "run_ci=true" >> $GITHUB_OUTPUT
+        else
+          echo "run_ci=false" >> $GITHUB_OUTPUT
+        fi

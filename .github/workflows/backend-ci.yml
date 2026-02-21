@@ -1,11 +1,6 @@
 name: PR Checks
 
-on:
-  pull_request:
-    paths:
-      - "src/**"
-      - "build.gradle.kts"
-      - "settings.gradle.kts"
+on: pull_request
 
 jobs:
   build:
@@ -13,12 +8,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+      - uses: ./.github/actions/detect-changes
+        id: changes
       - uses: actions/setup-java@v5
+        if: steps.changes.outputs.run_ci == 'true'
         with:
           distribution: temurin
           java-version: 22
       - run: chmod +x ./gradlew
+        if: steps.changes.outputs.run_ci == 'true'
       - run: ./gradlew assemble --no-daemon
+        if: steps.changes.outputs.run_ci == 'true'
+      - name: Skip build
+        if: steps.changes.outputs.run_ci == 'false'
+        run: echo "Skipping build"
 
   test:
     name: Tests
@@ -26,22 +29,39 @@ jobs:
     needs: build
     steps:
       - uses: actions/checkout@v6
+      - uses: ./.github/actions/detect-changes
+        id: changes
       - uses: actions/setup-java@v5
+        if: steps.changes.outputs.run_ci == 'true'
         with:
           distribution: temurin
           java-version: 22
       - run: chmod +x ./gradlew
+        if: steps.changes.outputs.run_ci == 'true'
       - run: echo "SPRING_PROFILES_ACTIVE=test" >> $GITHUB_ENV
+        if: steps.changes.outputs.run_ci == 'true'
       - run: ./gradlew test --no-daemon
+        if: steps.changes.outputs.run_ci == 'true'
+      - name: Skip tests
+        if: steps.changes.outputs.run_ci == 'false'
+        run: echo "Skipping tests"
 
   spotless:
     name: Spotless Check
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+      - uses: ./.github/actions/detect-changes
+        id: changes
       - uses: actions/setup-java@v5
+        if: steps.changes.outputs.run_ci == 'true'
         with:
           distribution: temurin
           java-version: 22
       - run: chmod +x ./gradlew
+        if: steps.changes.outputs.run_ci == 'true'
       - run: ./gradlew spotlessCheck --no-daemon
+        if: steps.changes.outputs.run_ci == 'true'
+      - name: Skip spotless
+        if: steps.changes.outputs.run_ci == 'false'
+        run: echo "Skipping spotless check"

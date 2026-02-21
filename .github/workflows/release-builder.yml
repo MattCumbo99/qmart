@@ -68,21 +68,13 @@ jobs:
       - run: chmod +x ./gradlew
       - run: ./gradlew clean build -Pversion=${{ steps.newTag.outputs.version }}
       - name: Create GitHub release
-        id: create_release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ steps.newTag.outputs.version }}
           name: v${{ steps.newTag.outputs.version }}
           generate_release_notes: true
           prerelease: ${{ steps.newTag.outputs.prerelease }}
+          files: |
+            build/libs/qmart-${{ steps.newTag.outputs.version }}.jar
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Upload release asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: build/libs/qmart-${{ steps.newTag.outputs.version }}.jar
-          asset_name: qmart-${{ steps.newTag.outputs.version }}.jar
-          asset_content_type: application/java-archive
