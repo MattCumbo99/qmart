@@ -8,7 +8,7 @@ plugins {
 
 group = "com.mattrition"
 
-version = "0.0.1-SNAPSHOT"
+version = findProperty("version")?.toString() ?: "0.0.1-SNAPSHOT"
 
 description = "Spring Boot project for QuantumMart"
 
