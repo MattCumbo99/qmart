@@ -54,6 +54,24 @@ jobs:
           fi
           newVersion="${major}.${minor}.${patch}${suffix}"
           echo "version=$newVersion" >> $GITHUB_OUTPUT
+          if [ "$suffix" = "-alpha" ]; then
+            echo "prerelease=true" >> $GITHUB_OUTPUT
+          else
+            echo "prerelease=false" >> $GITHUB_OUTPUT
+          fi
+      - name: Generate changelog
+        id: changelog
+        run: |
+          previous=$(git tag --sort=version:refname | tail -n 2 | head -n 1)
+          current=v${{ steps.newTag.outputs.version }}
+          
+          echo "Generating changelog from $previous to $current"
+          
+          log=$(git log $previous..HEAD --pretty=format:"- %s (%h)")
+          
+          echo "changes<<EOF" >> $GITHUB_OUTPUT
+          echo "$log" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
       - name: Create tag
         run: |
           git config user.name "github-actions"
@@ -68,6 +86,8 @@ jobs:
         with:
           tag_name: v${{ steps.newTag.outputs.version }}
           release_name: Release ${{ steps.newTag.outputs.version }}
+          prerelease: ${{ steps.newTag.outputs.prerelease }}
+          body: ${{ steps.changelog.outputs.changes }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Upload release asset
