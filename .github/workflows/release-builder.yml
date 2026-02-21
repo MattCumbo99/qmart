@@ -59,19 +59,6 @@ jobs:
           else
             echo "prerelease=false" >> $GITHUB_OUTPUT
           fi
-      - name: Generate changelog
-        id: changelog
-        run: |
-          previous=$(git tag --sort=version:refname | tail -n 2 | head -n 1)
-          current=v${{ steps.newTag.outputs.version }}
-          
-          echo "Generating changelog from $previous to $current"
-          
-          log=$(git log $previous..HEAD --pretty=format:"- %s (%h)")
-          
-          echo "changes<<EOF" >> $GITHUB_OUTPUT
-          echo "$log" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
       - name: Create tag
         run: |
           git config user.name "github-actions"
@@ -82,12 +69,12 @@ jobs:
       - run: ./gradlew clean build -Pversion=${{ steps.newTag.outputs.version }}
       - name: Create GitHub release
         id: create_release
-        uses: actions/create-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ steps.newTag.outputs.version }}
-          release_name: Release ${{ steps.newTag.outputs.version }}
+          name: v${{ steps.newTag.outputs.version }}
+          generate_release_notes: true
           prerelease: ${{ steps.newTag.outputs.prerelease }}
-          body: ${{ steps.changelog.outputs.changes }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Upload release asset
