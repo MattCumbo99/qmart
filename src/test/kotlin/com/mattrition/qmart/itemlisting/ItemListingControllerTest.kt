@@ -1,9 +1,7 @@
 package com.mattrition.qmart.itemlisting
 
 import com.mattrition.qmart.BaseH2Test
-import com.mattrition.qmart.shop.ItemListing
-import com.mattrition.qmart.shop.ItemListingRepository
-import com.mattrition.qmart.shop.dto.ItemListingDto
+import com.mattrition.qmart.itemlisting.dto.ItemListingDto
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested

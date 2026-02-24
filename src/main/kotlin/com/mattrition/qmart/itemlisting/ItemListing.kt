@@ -1,4 +1,4 @@
-package com.mattrition.qmart.shop
+package com.mattrition.qmart.itemlisting
 
 import jakarta.persistence.Column
 import jakarta.persistence.Entity

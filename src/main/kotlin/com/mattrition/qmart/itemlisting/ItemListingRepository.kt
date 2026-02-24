@@ -1,4 +1,4 @@
-package com.mattrition.qmart.shop
+package com.mattrition.qmart.itemlisting
 
 import org.springframework.data.jpa.repository.JpaRepository
 import java.util.UUID

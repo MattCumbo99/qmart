@@ -15,10 +15,19 @@ import java.util.UUID
 data class Order(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "order_id")
+    @Column(name = "order_id", nullable = false)
     val orderId: UUID? = null,
     @Column(name = "buyer_id", nullable = false) val buyerId: UUID? = null,
     val status: String = OrderStatus.PENDING,
-    @Column(name = "total_paid") val totalPaid: BigDecimal = BigDecimal.ZERO,
-    @Column(name = "created_at") val createdAt: LocalDateTime = LocalDateTime.now(),
+    @Column(name = "total_paid", nullable = false) val totalPaid: BigDecimal = BigDecimal.ZERO,
+    @Column(name = "created_at", nullable = false)
+    val createdAt: LocalDateTime = LocalDateTime.now(),
+    @Column(name = "shipping_firstname", nullable = false) val shippingFirstname: String = "",
+    @Column(name = "shipping_lastname", nullable = false) val shippingLastname: String = "",
+    @Column(name = "shipping_address1", nullable = false) val shippingAddress1: String = "",
+    @Column(name = "shipping_address2") val shippingAddress2: String? = null,
+    @Column(name = "shipping_city", nullable = false) val shippingCity: String = "",
+    @Column(name = "shipping_state", nullable = false) val shippingState: String = "",
+    @Column(name = "shipping_zip", nullable = false) val shippingZip: String = "",
+    @Column(name = "shipping_phone", nullable = false) val shippingPhone: String = "",
 )

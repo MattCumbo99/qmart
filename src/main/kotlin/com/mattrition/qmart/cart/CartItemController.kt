@@ -1,7 +1,7 @@
 package com.mattrition.qmart.cart
 
 import com.mattrition.qmart.cart.dto.CartItemWithListingDto
-import com.mattrition.qmart.shop.dto.ItemListingDto
+import com.mattrition.qmart.itemlisting.dto.ItemListingDto
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
