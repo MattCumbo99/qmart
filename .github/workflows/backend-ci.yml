@@ -37,6 +37,9 @@ jobs:
       - name: Check for relevant changes
         uses: ./.github/actions/detect-build-changes
         id: changes
+      - name: Verify value from changes
+        run: |
+          echo ${{ steps.changes.outputs.run_ci }}
       - uses: actions/setup-java@v5
         if: ${{ steps.changes.outputs.run_ci == true }}
         with:
