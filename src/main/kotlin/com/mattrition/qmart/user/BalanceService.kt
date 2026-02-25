@@ -93,4 +93,17 @@ class BalanceService(
 
         return newBalance
     }
+
+    fun setBalance(
+        userId: UUID,
+        balance: BigDecimal,
+    ): BigDecimal {
+        val user =
+            userRepository.findById(userId).orElseThrow {
+                throw NotFoundException("User ID not found: $userId")
+            }
+        user.coinBalance = balance
+
+        return user.coinBalance
+    }
 }
