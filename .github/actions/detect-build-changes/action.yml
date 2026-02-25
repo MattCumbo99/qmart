@@ -14,7 +14,7 @@ runs:
         echo "Changed files:"
         echo "$CHANGED"
         
-        if echo "$CHANGED" | grep -E "src/|build.gradle.kts|settings.gradle.kts" > /dev/null; then
+        if echo "$CHANGED" | tr -d '\r' | grep -E "src/|build.gradle.kts|settings.gradle.kts" > /dev/null; then
           echo "run_ci=true" >> $GITHUB_OUTPUT
         else
           echo "run_ci=false" >> $GITHUB_OUTPUT
