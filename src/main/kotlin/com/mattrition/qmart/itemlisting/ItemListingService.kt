@@ -1,8 +1,8 @@
-package com.mattrition.qmart.shop
+package com.mattrition.qmart.itemlisting
 
 import com.mattrition.qmart.exception.NotFoundException
-import com.mattrition.qmart.shop.dto.ItemListingDto
-import com.mattrition.qmart.shop.dto.toDto
+import com.mattrition.qmart.itemlisting.dto.ItemListingDto
+import com.mattrition.qmart.itemlisting.dto.toDto
 import com.mattrition.qmart.user.UserRepository
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service

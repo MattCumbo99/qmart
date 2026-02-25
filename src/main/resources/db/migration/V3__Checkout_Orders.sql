@@ -1,0 +1,67 @@
+ALTER TABLE orders
+    ADD COLUMN shipping_firstname VARCHAR(100) NOT NULL DEFAULT 'TEMP';
+
+ALTER TABLE orders
+    ADD COLUMN shipping_lastname VARCHAR(100) NOT NULL DEFAULT 'TEMP';
+
+ALTER TABLE orders
+    ADD COLUMN shipping_address1 VARCHAR(150) NOT NULL DEFAULT 'TEMP';
+
+ALTER TABLE orders
+    ADD COLUMN shipping_address2 VARCHAR(50) DEFAULT NULL;
+
+ALTER TABLE orders
+    ADD COLUMN shipping_city VARCHAR(100) NOT NULL DEFAULT 'TEMP';
+
+ALTER TABLE orders
+    ADD COLUMN shipping_state VARCHAR(50) NOT NULL DEFAULT 'TEMP';
+
+ALTER TABLE orders
+    ADD COLUMN shipping_zip VARCHAR(10) NOT NULL DEFAULT 'TEMP';
+
+ALTER TABLE orders
+    ADD COLUMN shipping_phone VARCHAR(20) NOT NULL DEFAULT 'TEMP';
+
+ALTER TABLE orders
+    ALTER COLUMN shipping_firstname DROP DEFAULT;
+
+ALTER TABLE orders
+    ALTER COLUMN shipping_lastname DROP DEFAULT;
+
+ALTER TABLE orders
+    ALTER COLUMN shipping_address1 DROP DEFAULT;
+
+ALTER TABLE orders
+    ALTER COLUMN shipping_city DROP DEFAULT;
+
+ALTER TABLE orders
+    ALTER COLUMN shipping_state DROP DEFAULT;
+
+ALTER TABLE orders
+    ALTER COLUMN shipping_zip DROP DEFAULT;
+
+ALTER TABLE orders
+    ALTER COLUMN shipping_phone DROP DEFAULT;
+	
+ALTER TABLE order_items
+	ADD COLUMN status VARCHAR(50) NOT NULL DEFAULT 'PAID_PENDING_SHIPMENT';
+
+ALTER TABLE order_items
+	ADD COLUMN paid_at TIMESTAMP NOT NULL DEFAULT now();
+
+ALTER TABLE order_items
+	ADD CONSTRAINT order_items_status_check
+		CHECK (status IN (
+			'PAID_PENDING_SHIPMENT',
+			'SHIPPED',
+			'COMPLETED',
+			'CANCELLED',
+			'REFUNDED'
+		));
+		
+ALTER TABLE users
+	ALTER COLUMN coin_balance SET DEFAULT 1000.00;
+	
+UPDATE users
+	SET coin_balance = 1000.00
+	WHERE coin_balance = 0.00;

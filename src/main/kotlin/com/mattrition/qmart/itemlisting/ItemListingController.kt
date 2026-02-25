@@ -1,6 +1,6 @@
-package com.mattrition.qmart.shop
+package com.mattrition.qmart.itemlisting
 
-import com.mattrition.qmart.shop.dto.ItemListingDto
+import com.mattrition.qmart.itemlisting.dto.ItemListingDto
 import com.mattrition.qmart.user.UserRole
 import jakarta.annotation.security.RolesAllowed
 import org.springframework.http.HttpStatus

@@ -1,10 +1,10 @@
 package com.mattrition.qmart.cart
 
 import com.mattrition.qmart.BaseH2Test
-import com.mattrition.qmart.shop.ItemListing
-import com.mattrition.qmart.shop.ItemListingRepository
-import com.mattrition.qmart.shop.dto.ItemListingDto
-import com.mattrition.qmart.shop.dto.toDto
+import com.mattrition.qmart.itemlisting.ItemListing
+import com.mattrition.qmart.itemlisting.ItemListingRepository
+import com.mattrition.qmart.itemlisting.dto.ItemListingDto
+import com.mattrition.qmart.itemlisting.dto.toDto
 import io.kotest.matchers.equals.shouldBeEqual
 import io.kotest.matchers.ints.shouldBeGreaterThan
 import io.kotest.matchers.nulls.shouldBeNull
