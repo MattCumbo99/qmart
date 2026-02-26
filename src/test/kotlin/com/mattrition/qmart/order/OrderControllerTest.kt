@@ -124,7 +124,7 @@ class OrderControllerTest : BaseH2Test() {
             )
 
             val sampleOrder = orderWithAddress(TestUsers.user.id!!, BigDecimal(5000))
-            TestUsers.user.coinBalance shouldBeLessThan BigDecimal(5000)
+            TestUsers.user.balance shouldBeLessThan BigDecimal(5000)
 
             mockRequest(
                 requestType = POST,
@@ -171,7 +171,7 @@ class OrderControllerTest : BaseH2Test() {
             userCartItems() shouldHaveSize 2
 
             // Ensure we have enough to buy the items
-            var initialBalance = getTestUser().coinBalance.shouldNotBeNull()
+            var initialBalance = getTestUser().balance.shouldNotBeNull()
             if (initialBalance < BigDecimal(450)) {
                 initialBalance = balanceService.setBalance(TestUsers.user.id!!, BigDecimal(1000))
             }
@@ -192,7 +192,7 @@ class OrderControllerTest : BaseH2Test() {
 
             // Money deducted
             val newBalance = initialBalance - sampleOrder.totalPaid
-            getTestUser().coinBalance shouldBeEqual newBalance
+            getTestUser().balance shouldBeEqual newBalance
 
             // User has 1 order
             val userOrders = orderRepository.findOrdersByBuyerId(TestUsers.user.id!!)
