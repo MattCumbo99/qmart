@@ -23,7 +23,7 @@ class BalanceService(
                 throw NotFoundException("User ID not found: $userId")
             }
 
-        return user.coinBalance
+        return user.balance
     }
 
     /**
@@ -41,9 +41,9 @@ class BalanceService(
                 throw NotFoundException("User ID not found: $userId")
             }
 
-        user.coinBalance += amount
+        user.balance += amount
 
-        return user.coinBalance
+        return user.balance
     }
 
     /**
@@ -62,14 +62,14 @@ class BalanceService(
                 throw NotFoundException("User ID not found: $userId")
             }
 
-        if (user.coinBalance < amount) {
+        if (user.balance < amount) {
             throw ForbiddenException(
-                "User ${user.username} has insufficient funds: ${user.coinBalance} < $amount",
+                "User ${user.username} has insufficient funds: ${user.balance} < $amount",
             )
         }
 
-        user.coinBalance -= amount
-        return user.coinBalance
+        user.balance -= amount
+        return user.balance
     }
 
     /**
@@ -102,8 +102,8 @@ class BalanceService(
             userRepository.findById(userId).orElseThrow {
                 throw NotFoundException("User ID not found: $userId")
             }
-        user.coinBalance = balance
+        user.balance = balance
 
-        return user.coinBalance
+        return user.balance
     }
 }

@@ -61,7 +61,7 @@ class UserService(
             username = this.username,
             email = this.email,
             createdAt = this.createdAt,
-            coinBalance = this.coinBalance,
+            coinBalance = this.balance,
             role = this.role,
         )
 }

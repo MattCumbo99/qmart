@@ -18,7 +18,7 @@ import java.util.UUID
  * @property passwordHash Encrypted password.
  * @property createdAt Date this user was created.
  * @property email
- * @property coinBalance How many coins this user has.
+ * @property balance How much money the user has.
  * @property role Privilege level of the user (user, moderator, admin).
  */
 @Entity
@@ -33,6 +33,6 @@ data class User(
     @Column(name = "created_at", nullable = false)
     val createdAt: LocalDateTime = LocalDateTime.now(),
     val email: String? = null,
-    @Column(name = "coin_balance", nullable = false) var coinBalance: BigDecimal = BigDecimal(1000),
+    @Column(nullable = false) var balance: BigDecimal = BigDecimal(1000),
     @Column(nullable = false) val role: String = UserRole.USER.lowercase(),
 )
