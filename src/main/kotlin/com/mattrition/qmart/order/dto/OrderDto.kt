@@ -18,4 +18,17 @@ data class OrderDto(
     val shippingState: String,
     val shippingZip: String,
     val shippingPhone: String,
-)
+) {
+    /** Extracts this DTO's shipping information as a packaged object. */
+    fun extractShipping() =
+        ShippingInfoDto(
+            firstName = shippingFirstname,
+            lastName = shippingLastname,
+            address1 = shippingAddress1,
+            address2 = shippingAddress2,
+            city = shippingCity,
+            state = shippingState,
+            zip = shippingZip,
+            phone = shippingPhone,
+        )
+}

@@ -13,8 +13,12 @@ object OrderItemMapper {
             listingId = orderItem.listingId!!,
             sellerId = orderItem.sellerId!!,
             quantity = orderItem.quantity,
-            priceEach = orderItem.priceEach,
+            listingPrice = orderItem.listingPrice,
             status = orderItem.status,
+            paidAt = orderItem.paidAt,
+            listingTitle = orderItem.listingTitle,
+            listingDescription = orderItem.listingDescription,
+            listingImageUrl = orderItem.listingImageUrl,
         )
 
     /** Converts a cart item DTO to an order item DTO. */
@@ -23,7 +27,10 @@ object OrderItemMapper {
             listingId = cartItemDto.itemListing.id!!,
             sellerId = cartItemDto.itemListing.sellerId,
             quantity = cartItemDto.quantity,
-            priceEach = cartItemDto.itemListing.price,
+            listingPrice = cartItemDto.itemListing.price,
+            listingTitle = cartItemDto.itemListing.title,
+            listingDescription = cartItemDto.itemListing.description,
+            listingImageUrl = cartItemDto.itemListing.imageUrl,
         )
 
     fun asNewEntity(
@@ -34,7 +41,10 @@ object OrderItemMapper {
         listingId = orderItemDto.listingId,
         sellerId = orderItemDto.sellerId,
         quantity = orderItemDto.quantity,
-        priceEach = orderItemDto.priceEach,
+        listingPrice = orderItemDto.listingPrice,
         paidAt = orderItemDto.paidAt,
+        listingTitle = orderItemDto.listingTitle,
+        listingDescription = orderItemDto.listingDescription,
+        listingImageUrl = orderItemDto.listingImageUrl,
     )
 }

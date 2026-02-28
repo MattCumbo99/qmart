@@ -1,11 +1,13 @@
 package com.mattrition.qmart.orderitem
 
 import com.mattrition.qmart.orderitem.dto.OrderItemDto
+import com.mattrition.qmart.orderitem.dto.OrderItemWithShippingDto
 import com.mattrition.qmart.user.UserRole
 import jakarta.annotation.security.RolesAllowed
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import java.util.UUID
 
@@ -18,11 +20,12 @@ class OrderItemController(
     @RolesAllowed(UserRole.USER)
     fun getOrderItems(
         @PathVariable orderId: UUID,
-    ): List<OrderItemDto> = orderItemService.getOrderItems(orderId)
+    ): List<OrderItemDto> = orderItemService.getOrderItemsFromOrder(orderId)
 
     @GetMapping("/sellerId/{sellerId}")
     @RolesAllowed(UserRole.USER)
     fun getOrderItemsSoldBy(
         @PathVariable sellerId: UUID,
-    ): List<OrderItemDto> = orderItemService.getOrderItemsBySeller(sellerId)
+        @RequestParam(required = false) status: OrderItemStatus?,
+    ): List<OrderItemWithShippingDto> = orderItemService.getOrderItemsBySeller(sellerId, status)
 }
