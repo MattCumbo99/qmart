@@ -1,13 +1,11 @@
 package com.mattrition.qmart.orderitem
 
 import com.mattrition.qmart.orderitem.dto.OrderItemDto
-import com.mattrition.qmart.orderitem.dto.OrderItemWithShippingDto
-import com.mattrition.qmart.user.UserRole
-import jakarta.annotation.security.RolesAllowed
-import org.springframework.web.bind.annotation.GetMapping
+import com.mattrition.qmart.orderitem.dto.UpdateOrderItemRequest
+import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import java.util.UUID
 
@@ -16,16 +14,9 @@ import java.util.UUID
 class OrderItemController(
     private val orderItemService: OrderItemService,
 ) {
-    @GetMapping("/orderId/{orderId}")
-    @RolesAllowed(UserRole.USER)
-    fun getOrderItems(
-        @PathVariable orderId: UUID,
-    ): List<OrderItemDto> = orderItemService.getOrderItemsFromOrder(orderId)
-
-    @GetMapping("/sellerId/{sellerId}")
-    @RolesAllowed(UserRole.USER)
-    fun getOrderItemsSoldBy(
-        @PathVariable sellerId: UUID,
-        @RequestParam(required = false) status: OrderItemStatus?,
-    ): List<OrderItemWithShippingDto> = orderItemService.getOrderItemsBySeller(sellerId, status)
+    @PatchMapping("/{id}")
+    fun updateStatus(
+        @PathVariable id: UUID,
+        @RequestBody request: UpdateOrderItemRequest
+    ): OrderItemDto = orderItemService.updateOrderItem(id, request)
 }

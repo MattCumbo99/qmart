@@ -6,7 +6,7 @@ import java.time.OffsetDateTime
 import java.util.UUID
 
 data class OrderItemDto(
-    val orderItemId: UUID? = null,
+    val id: UUID? = null,
     val orderId: UUID? = null,
     val listingId: UUID,
     val sellerId: UUID,
@@ -17,4 +17,5 @@ data class OrderItemDto(
     val listingTitle: String,
     val listingDescription: String? = null,
     val listingImageUrl: String? = null,
+    val shippedOn: OffsetDateTime? = null,
 )

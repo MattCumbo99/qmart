@@ -3,13 +3,11 @@ package com.mattrition.qmart.orderitem.mapper
 import com.mattrition.qmart.cart.dto.CartItemWithListingDto
 import com.mattrition.qmart.orderitem.OrderItem
 import com.mattrition.qmart.orderitem.dto.OrderItemDto
-import java.util.UUID
 
 object OrderItemMapper {
     fun toDto(orderItem: OrderItem) =
         OrderItemDto(
-            orderItemId = orderItem.orderItemId!!,
-            orderId = orderItem.orderId!!,
+            id = orderItem.id!!,
             listingId = orderItem.listingId!!,
             sellerId = orderItem.sellerId!!,
             quantity = orderItem.quantity,
@@ -19,6 +17,7 @@ object OrderItemMapper {
             listingTitle = orderItem.listingTitle,
             listingDescription = orderItem.listingDescription,
             listingImageUrl = orderItem.listingImageUrl,
+            shippedOn = orderItem.shippedOn,
         )
 
     /** Converts a cart item DTO to an order item DTO. */
@@ -33,18 +32,15 @@ object OrderItemMapper {
             listingImageUrl = cartItemDto.itemListing.imageUrl,
         )
 
-    fun asNewEntity(
-        orderItemDto: OrderItemDto,
-        orderId: UUID,
-    ) = OrderItem(
-        orderId = orderId,
-        listingId = orderItemDto.listingId,
-        sellerId = orderItemDto.sellerId,
-        quantity = orderItemDto.quantity,
-        listingPrice = orderItemDto.listingPrice,
-        paidAt = orderItemDto.paidAt,
-        listingTitle = orderItemDto.listingTitle,
-        listingDescription = orderItemDto.listingDescription,
-        listingImageUrl = orderItemDto.listingImageUrl,
-    )
+    fun asNewEntity(orderItemDto: OrderItemDto) =
+        OrderItem(
+            listingId = orderItemDto.listingId,
+            sellerId = orderItemDto.sellerId,
+            quantity = orderItemDto.quantity,
+            listingPrice = orderItemDto.listingPrice,
+            paidAt = orderItemDto.paidAt,
+            listingTitle = orderItemDto.listingTitle,
+            listingDescription = orderItemDto.listingDescription,
+            listingImageUrl = orderItemDto.listingImageUrl,
+        )
 }

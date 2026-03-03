@@ -1,12 +1,16 @@
 package com.mattrition.qmart.orderitem
 
+import com.mattrition.qmart.order.Order
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
+import jakarta.persistence.FetchType
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
+import jakarta.persistence.JoinColumn
+import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
 import java.math.BigDecimal
 import java.time.OffsetDateTime
@@ -17,9 +21,8 @@ import java.util.UUID
 data class OrderItem(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "order_item_id", nullable = false)
-    val orderItemId: UUID? = null,
-    @Column(name = "order_id", nullable = false) val orderId: UUID? = null,
+    @Column(nullable = false)
+    val id: UUID? = null,
     @Column(name = "listing_id", nullable = false) val listingId: UUID? = null,
     @Column(name = "seller_id", nullable = false) val sellerId: UUID? = null,
     @Column(nullable = false) val quantity: Int = 0,
@@ -32,4 +35,6 @@ data class OrderItem(
     @Column(name = "listing_title", nullable = false) val listingTitle: String = "",
     @Column(name = "listing_description") val listingDescription: String? = null,
     @Column(name = "listing_image_url") val listingImageUrl: String? = null,
+    @Column(name = "shipped_on") var shippedOn: OffsetDateTime? = null,
+    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "order_id") var order: Order? = null,
 )

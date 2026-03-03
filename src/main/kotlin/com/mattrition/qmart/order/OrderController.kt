@@ -1,7 +1,6 @@
 package com.mattrition.qmart.order
 
 import com.mattrition.qmart.order.dto.OrderDto
-import com.mattrition.qmart.order.dto.OrderWithItemsDto
 import com.mattrition.qmart.user.UserRole
 import jakarta.annotation.security.RolesAllowed
 import org.springframework.http.HttpStatus
@@ -32,11 +31,17 @@ class OrderController(
         @PathVariable username: String,
     ): List<OrderDto> = orderService.getOrdersBoughtBy(username)
 
+    @GetMapping("/sellerId/{sellerId}")
+    @PreAuthorize("#sellerId == authentication.principal.id")
+    fun getRelevantOrdersToSeller(
+        @PathVariable sellerId: UUID,
+    ): List<OrderDto> = orderService.getUnfinishedOrdersForSeller(sellerId)
+
     @PostMapping
     @PreAuthorize("#orderInfo.buyerId == authentication.principal.id")
     fun createOrder(
         @RequestBody orderInfo: OrderDto,
-    ): ResponseEntity<OrderWithItemsDto> {
+    ): ResponseEntity<OrderDto> {
         val orderWithItems = orderService.createOrder(orderInfo)
 
         return ResponseEntity(orderWithItems, HttpStatus.CREATED)

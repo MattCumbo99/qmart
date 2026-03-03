@@ -154,7 +154,7 @@ class CartItemControllerTest : BaseH2Test() {
 
         @Test
         fun `should remove an item from cart`() {
-            cartItemRepository.findById(cartItem1.cartItemId!!).getOrNull().shouldNotBeNull()
+            cartItemRepository.findById(cartItem1.id!!).getOrNull().shouldNotBeNull()
 
             mockRequest(
                 requestType = DELETE,
@@ -162,7 +162,7 @@ class CartItemControllerTest : BaseH2Test() {
                 token = TestTokens.user,
             ).andExpect(status().isOk)
 
-            cartItemRepository.findById(cartItem1.cartItemId!!).getOrNull().shouldBeNull()
+            cartItemRepository.findById(cartItem1.id!!).getOrNull().shouldBeNull()
             cartItemRepository.findCartItemsByUserId(TestUsers.user.id!!).size shouldBe 1
         }
     }

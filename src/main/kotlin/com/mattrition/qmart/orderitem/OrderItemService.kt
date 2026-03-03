@@ -1,48 +1,49 @@
 package com.mattrition.qmart.orderitem
 
+import com.mattrition.qmart.auth.CustomUserDetails
+import com.mattrition.qmart.exception.ForbiddenException
 import com.mattrition.qmart.exception.NotFoundException
-import com.mattrition.qmart.order.OrderRepository
-import com.mattrition.qmart.order.mapper.OrderMapper
 import com.mattrition.qmart.orderitem.dto.OrderItemDto
-import com.mattrition.qmart.orderitem.dto.OrderItemWithShippingDto
+import com.mattrition.qmart.orderitem.dto.UpdateOrderItemRequest
 import com.mattrition.qmart.orderitem.mapper.OrderItemMapper
+import jakarta.transaction.Transactional
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
+import java.time.OffsetDateTime
 import java.util.UUID
 
 @Service
 class OrderItemService(
     private val orderItemRepository: OrderItemRepository,
-    private val orderRepository: OrderRepository,
 ) {
     /**
-     * Gets order items attached to an order entity.
+     * Patches an order item.
      *
-     * @throws NotFoundException If the order doesn't exist.
+     * @throws NotFoundException If the order item does not exist.
+     * @throws ForbiddenException If the authentication ID does not match the seller ID.
      */
-    fun getOrderItemsFromOrder(id: UUID): List<OrderItemDto> {
-        orderRepository.findById(id).orElseThrow {
-            throw NotFoundException("Order with ID $id not found.")
+    @Transactional
+    fun updateOrderItem(
+        orderItemId: UUID,
+        updates: UpdateOrderItemRequest,
+    ): OrderItemDto {
+        val orderItem =
+            orderItemRepository.findById(orderItemId).orElseThrow {
+                throw NotFoundException("Order item with id $orderItemId does not exist.")
+            }
+
+        val auth = SecurityContextHolder.getContext().authentication
+        val principal = auth?.principal as CustomUserDetails
+
+        if (orderItem.sellerId != principal.id) {
+            throw ForbiddenException("User not authorized.")
         }
 
-        val orderItems = orderItemRepository.findOrderItemsByOrderId(id)
+        if (updates.status != null && updates.status == OrderItemStatus.SHIPPED) {
+            orderItem.status = updates.status
+            orderItem.shippedOn = OffsetDateTime.now()
+        }
 
-        return orderItems.map { OrderItemMapper.toDto(it) }
+        return OrderItemMapper.toDto(orderItem)
     }
-
-    /**
-     * Retrieves order items associated with a seller and sorts them by how early the item was paid
-     * for and attaches the order's shipping info.
-     */
-    fun getOrderItemsBySeller(
-        sellerId: UUID,
-        status: OrderItemStatus?,
-    ): List<OrderItemWithShippingDto> =
-        orderItemRepository.findSellerItems(sellerId, status).map { orderItem ->
-            val orderItemDto = OrderItemMapper.toDto(orderItem)
-
-            val originalOrder = orderRepository.findById(orderItem.orderId!!).get()
-            val shippingInfo = OrderMapper.toDto(originalOrder).extractShipping()
-
-            OrderItemWithShippingDto(orderItemDto, shippingInfo)
-        }
 }

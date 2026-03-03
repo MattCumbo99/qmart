@@ -7,6 +7,7 @@ import com.mattrition.qmart.itemlisting.ItemListing
 import com.mattrition.qmart.itemlisting.ItemListingRepository
 import com.mattrition.qmart.order.dto.OrderDto
 import com.mattrition.qmart.orderitem.OrderItemRepository
+import com.mattrition.qmart.orderitem.dto.OrderItemDto
 import com.mattrition.qmart.user.BalanceService
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.comparables.shouldBeLessThan
@@ -31,6 +32,7 @@ class OrderControllerTest : BaseH2Test() {
         private fun orderWithAddress(
             buyerId: UUID,
             totalPaid: BigDecimal = BigDecimal.ZERO,
+            orderItems: List<OrderItemDto> = emptyList()
         ) = OrderDto(
             buyerId = buyerId,
             status = OrderStatus.PENDING,
@@ -42,6 +44,7 @@ class OrderControllerTest : BaseH2Test() {
             shippingState = "California",
             shippingZip = "11111",
             shippingPhone = "555-555-5555",
+            orderItems = orderItems,
         )
     }
 
@@ -203,7 +206,7 @@ class OrderControllerTest : BaseH2Test() {
             userOrder.totalPaid shouldBe sampleOrder.totalPaid
 
             // Order items associated with the order were created
-            val userOrderItems = orderItemRepository.findOrderItemsByOrderId(userOrder.orderId!!)
+            val userOrderItems = orderItemRepository.findOrderItemsByOrderId(userOrder.id!!)
             userOrderItems shouldHaveSize 2 // Two items were in the cart
         }
     }

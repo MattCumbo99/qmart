@@ -5,7 +5,6 @@ import com.mattrition.qmart.exception.BadRequestException
 import com.mattrition.qmart.exception.ForbiddenException
 import com.mattrition.qmart.exception.NotFoundException
 import com.mattrition.qmart.order.dto.OrderDto
-import com.mattrition.qmart.order.dto.OrderWithItemsDto
 import com.mattrition.qmart.order.mapper.OrderMapper
 import com.mattrition.qmart.orderitem.OrderItemRepository
 import com.mattrition.qmart.orderitem.mapper.OrderItemMapper
@@ -33,6 +32,20 @@ class OrderService(
         return getOrdersBoughtBy(user.id!!)
     }
 
+    fun getUnfinishedOrdersForSeller(sellerId: UUID): List<OrderDto> {
+        val orders =
+            orderRepository.findUnfinishedOrdersFromSeller(sellerId).map { order ->
+                val sellerItems =
+                    orderItemRepository.findByOrderIdAndSellerId(order.id!!, sellerId).map {
+                        OrderItemMapper.toDto(it)
+                    }
+
+                OrderMapper.toDto(order).copy(orderItems = sellerItems)
+            }
+
+        return orders
+    }
+
     /**
      * Saves a new order and its items to the database using the buyer's associated cart items. Once
      * an order is made, it clears the cart items being held by the buyer.
@@ -41,28 +54,28 @@ class OrderService(
      * @throws ForbiddenException If the buyer doesn't have enough money to make the order.
      */
     @Transactional
-    fun createOrder(orderInfo: OrderDto): OrderWithItemsDto {
+    fun createOrder(orderInfo: OrderDto): OrderDto {
         val cartItems = cartItemService.getCartItemsByUserId(orderInfo.buyerId)
-
         cartItems.ifEmpty { throw BadRequestException("Order has no items!") }
 
+        // Take the users money
         balanceService.deductBalance(orderInfo.buyerId, orderInfo.totalPaid)
 
         val orderEntity = OrderMapper.asNewEntity(orderInfo)
-        val newOrder = OrderMapper.toDto(orderRepository.save(orderEntity))
 
-        val items =
-            cartItems.map { cartItem ->
-                // Save each item to the database
-                val cartOrderItem = OrderItemMapper.fromCartItemDto(cartItem)
-                val itemEntity = OrderItemMapper.asNewEntity(cartOrderItem, newOrder.orderId!!)
-                val newItem = orderItemRepository.save(itemEntity)
+        cartItems.forEach { cartItem ->
+            val itemDto = OrderItemMapper.fromCartItemDto(cartItem)
+            val itemEntity = OrderItemMapper.asNewEntity(itemDto)
 
-                OrderItemMapper.toDto(newItem)
-            }
+            itemEntity.order = orderEntity
+            orderEntity.orderItems.add(itemEntity)
+        }
 
+        val savedOrder = orderRepository.save(orderEntity)
+
+        // Clear the users cart
         cartItemService.deleteCartItemsByUserId(orderInfo.buyerId)
 
-        return OrderWithItemsDto(newOrder, items)
+        return OrderMapper.toDto(savedOrder)
     }
 }
