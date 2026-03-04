@@ -19,5 +19,5 @@ data class OrderDto(
     val shippingState: String,
     val shippingZip: String,
     val shippingPhone: String,
-    val orderItems: List<OrderItemDto>,
+    val orderItems: List<OrderItemDto> = emptyList(),
 )
