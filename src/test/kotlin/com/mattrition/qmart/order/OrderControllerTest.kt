@@ -66,7 +66,7 @@ class OrderControllerTest : BaseH2Test() {
     @Nested
     inner class CreateOrder {
         @Test
-        fun `should prevent requests not belonging to buyer and return 400 forbidden`() {
+        fun `should prevent requests not belonging to buyer and return 403 forbidden`() {
             val sampleOrder =
                 orderWithAddress(buyerId = TestUsers.user.id!!, totalPaid = BigDecimal(100))
 
@@ -79,7 +79,7 @@ class OrderControllerTest : BaseH2Test() {
         }
 
         @Test
-        fun `creating an order with no cart items should return 403 bad request`() {
+        fun `creating an order with no cart items should return 400 bad request`() {
             val sampleOrder = orderWithAddress(TestUsers.user.id!!, BigDecimal(100))
             val userCartItems = cartItemRepository.findCartItemsByUserId(TestUsers.user.id!!)
             userCartItems shouldHaveSize 0
@@ -93,7 +93,7 @@ class OrderControllerTest : BaseH2Test() {
         }
 
         @Test
-        fun `should return status 400 forbidden when user has insufficient funds`() {
+        fun `should return status 403 forbidden when user has insufficient funds`() {
             cartItemRepository.save(
                 CartItem(
                     userId = TestUsers.user.id!!,
