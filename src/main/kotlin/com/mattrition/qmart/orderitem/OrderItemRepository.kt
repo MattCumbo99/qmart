@@ -6,5 +6,8 @@ import java.util.UUID
 interface OrderItemRepository : JpaRepository<OrderItem, UUID> {
     fun findOrderItemsByOrderId(orderId: UUID): List<OrderItem>
 
-    fun findOrderItemsBySellerId(sellerId: UUID): List<OrderItem>
+    fun findByOrderIdAndSellerId(
+        orderId: UUID,
+        sellerId: UUID,
+    ): List<OrderItem>
 }

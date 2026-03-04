@@ -6,8 +6,8 @@ import com.mattrition.qmart.itemlisting.ItemListingRepository
 import com.mattrition.qmart.itemlisting.dto.ItemListingDto
 import com.mattrition.qmart.itemlisting.dto.toDto
 import com.mattrition.qmart.user.UserRepository
-import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.util.UUID
 
 @Service
@@ -32,7 +32,7 @@ class CartItemService(
             val sellerUsername = userRepo.findById(listing.sellerId!!).get().username
 
             CartItemWithListingDto(
-                cartItemId = cartItem.cartItemId!!,
+                cartItemId = cartItem.id!!,
                 quantity = cartItem.quantity,
                 itemListing = listing.toDto(sellerUsername),
             )
@@ -73,7 +73,7 @@ class CartItemService(
                 )
 
             CartItemWithListingDto(
-                cartItemId = savedCartItem.cartItemId!!,
+                cartItemId = savedCartItem.id!!,
                 quantity = savedCartItem.quantity,
                 itemListing = listingDto,
             )
@@ -83,7 +83,7 @@ class CartItemService(
             val newCartItem = cartItemRepo.save(existingItem.copy(quantity = updatedQuantity))
 
             CartItemWithListingDto(
-                cartItemId = newCartItem.cartItemId!!,
+                cartItemId = newCartItem.id!!,
                 quantity = updatedQuantity,
                 itemListing = listingDto,
             )

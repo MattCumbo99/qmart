@@ -4,8 +4,6 @@ import com.mattrition.qmart.BaseH2Test
 import com.mattrition.qmart.cart.CartItem
 import com.mattrition.qmart.cart.CartItemRepository
 import com.mattrition.qmart.itemlisting.ItemListing
-import com.mattrition.qmart.itemlisting.ItemListingRepository
-import com.mattrition.qmart.order.dto.OrderDto
 import com.mattrition.qmart.orderitem.OrderItemRepository
 import com.mattrition.qmart.user.BalanceService
 import io.kotest.matchers.collections.shouldHaveSize
@@ -14,40 +12,21 @@ import io.kotest.matchers.equals.shouldBeEqual
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpMethod.POST
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import java.math.BigDecimal
-import java.util.UUID
 import kotlin.jvm.optionals.getOrNull
 
 class OrderControllerTest : BaseH2Test() {
     companion object {
         private const val BASE_PATH = "/api/orders"
-
-        private fun orderWithAddress(
-            buyerId: UUID,
-            totalPaid: BigDecimal = BigDecimal.ZERO,
-        ) = OrderDto(
-            buyerId = buyerId,
-            status = OrderStatus.PENDING,
-            totalPaid = totalPaid,
-            shippingFirstname = "Test1",
-            shippingLastname = "Test2",
-            shippingAddress1 = "1234 Main St",
-            shippingCity = "London",
-            shippingState = "California",
-            shippingZip = "11111",
-            shippingPhone = "555-555-5555",
-        )
     }
 
     @Autowired lateinit var cartItemRepository: CartItemRepository
-
-    @Autowired lateinit var itemListingRepository: ItemListingRepository
 
     @Autowired lateinit var orderRepository: OrderRepository
 
@@ -58,7 +37,7 @@ class OrderControllerTest : BaseH2Test() {
     private lateinit var sampleListing1: ItemListing
     private lateinit var sampleListing2: ItemListing
 
-    @BeforeAll
+    @BeforeEach
     fun addItemListing() {
         sampleListing1 =
             itemListingRepository.save(
@@ -87,7 +66,7 @@ class OrderControllerTest : BaseH2Test() {
     @Nested
     inner class CreateOrder {
         @Test
-        fun `should prevent requests not belonging to buyer and return 400 forbidden`() {
+        fun `should prevent requests not belonging to buyer and return 403 forbidden`() {
             val sampleOrder =
                 orderWithAddress(buyerId = TestUsers.user.id!!, totalPaid = BigDecimal(100))
 
@@ -100,7 +79,7 @@ class OrderControllerTest : BaseH2Test() {
         }
 
         @Test
-        fun `creating an order with no cart items should return 403 bad request`() {
+        fun `creating an order with no cart items should return 400 bad request`() {
             val sampleOrder = orderWithAddress(TestUsers.user.id!!, BigDecimal(100))
             val userCartItems = cartItemRepository.findCartItemsByUserId(TestUsers.user.id!!)
             userCartItems shouldHaveSize 0
@@ -114,7 +93,7 @@ class OrderControllerTest : BaseH2Test() {
         }
 
         @Test
-        fun `should return status 400 forbidden when user has insufficient funds`() {
+        fun `should return status 403 forbidden when user has insufficient funds`() {
             cartItemRepository.save(
                 CartItem(
                     userId = TestUsers.user.id!!,
@@ -203,7 +182,7 @@ class OrderControllerTest : BaseH2Test() {
             userOrder.totalPaid shouldBe sampleOrder.totalPaid
 
             // Order items associated with the order were created
-            val userOrderItems = orderItemRepository.findOrderItemsByOrderId(userOrder.orderId!!)
+            val userOrderItems = orderItemRepository.findOrderItemsByOrderId(userOrder.id!!)
             userOrderItems shouldHaveSize 2 // Two items were in the cart
         }
     }
