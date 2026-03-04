@@ -2,12 +2,13 @@ package com.mattrition.qmart.order.mapper
 
 import com.mattrition.qmart.order.Order
 import com.mattrition.qmart.order.dto.OrderDto
+import com.mattrition.qmart.orderitem.mapper.OrderItemMapper
 
 object OrderMapper {
     /** Converts an [Order] database entity into a data transfer object. */
     fun toDto(order: Order) =
         OrderDto(
-            orderId = order.orderId!!,
+            id = order.id!!,
             buyerId = order.buyerId!!,
             status = order.status,
             totalPaid = order.totalPaid,
@@ -20,6 +21,7 @@ object OrderMapper {
             shippingState = order.shippingState,
             shippingZip = order.shippingZip,
             shippingPhone = order.shippingPhone,
+            orderItems = order.orderItems.map { OrderItemMapper.toDto(it) },
         )
 
     /** Converts an order DTO into a savable entity for the Order database. */

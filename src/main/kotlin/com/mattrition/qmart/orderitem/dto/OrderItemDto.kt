@@ -2,16 +2,20 @@ package com.mattrition.qmart.orderitem.dto
 
 import com.mattrition.qmart.orderitem.OrderItemStatus
 import java.math.BigDecimal
-import java.time.LocalDateTime
+import java.time.OffsetDateTime
 import java.util.UUID
 
 data class OrderItemDto(
-    val orderItemId: UUID? = null,
+    val id: UUID? = null,
     val orderId: UUID? = null,
     val listingId: UUID,
     val sellerId: UUID,
     val quantity: Int,
-    val priceEach: BigDecimal,
+    val listingPrice: BigDecimal,
     val status: OrderItemStatus = OrderItemStatus.PAID_PENDING_SHIPMENT,
-    val paidAt: LocalDateTime = LocalDateTime.now(),
+    val paidAt: OffsetDateTime = OffsetDateTime.now(),
+    val listingTitle: String,
+    val listingDescription: String? = null,
+    val listingImageUrl: String? = null,
+    val shippedOn: OffsetDateTime? = null,
 )

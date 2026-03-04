@@ -1,10 +1,14 @@
 package com.mattrition.qmart.order
 
+import com.mattrition.qmart.orderitem.OrderItem
+import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
+import jakarta.persistence.FetchType
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
+import jakarta.persistence.OneToMany
 import jakarta.persistence.Table
 import java.math.BigDecimal
 import java.time.LocalDateTime
@@ -15,8 +19,8 @@ import java.util.UUID
 data class Order(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "order_id", nullable = false)
-    val orderId: UUID? = null,
+    @Column(nullable = false)
+    val id: UUID? = null,
     @Column(name = "buyer_id", nullable = false) val buyerId: UUID? = null,
     val status: String = OrderStatus.PENDING,
     @Column(name = "total_paid", nullable = false) val totalPaid: BigDecimal = BigDecimal.ZERO,
@@ -30,4 +34,6 @@ data class Order(
     @Column(name = "shipping_state", nullable = false) val shippingState: String = "",
     @Column(name = "shipping_zip", nullable = false) val shippingZip: String = "",
     @Column(name = "shipping_phone", nullable = false) val shippingPhone: String = "",
+    @OneToMany(mappedBy = "order", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
+    val orderItems: MutableList<OrderItem> = mutableListOf(),
 )

@@ -13,8 +13,8 @@ import java.util.UUID
 data class CartItem(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column("cart_item_id")
-    val cartItemId: UUID? = null,
+    @Column(nullable = false)
+    val id: UUID? = null,
     @Column("user_id") val userId: UUID? = null,
     @Column("listing_id") val listingId: UUID? = null,
     val quantity: Int = 1,
