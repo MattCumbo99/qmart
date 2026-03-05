@@ -1,6 +1,5 @@
-<h1 style="text-align: center">Quantum Mart Backend API</h1>
+<h1 align="center">Quantum Mart Backend API</h1>
 
-----
 <p align="center">
     <a href="https://spring.io/">
         <img src="https://img.shields.io/badge/Spring%20Boot-6DB33F?logo=springboot&logoColor=white" alt="Spring Boot"/>
