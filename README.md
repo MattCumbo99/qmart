@@ -44,15 +44,12 @@ to manage the local database.
     ```
 2. Create a run configuration for the application with the following environment variables:
     ```
-    DB_URL=<db url> (jdbc:postgresql://localhost:5432/qmartdb)
-    DB_USERNAME=<db username> (postgres)
-    DB_PASSWORD=<db password> (admin)
+    DB_URL=<db url> (ex: jdbc:postgresql://localhost:5432/qmartdb)
+    DB_USERNAME=<db username> (ex: postgres)
+    DB_PASSWORD=<db password> (ex: admin)
     SPRING_PROFILES_ACTIVE=dev
     ```
    Set the main class as `com.mattrition.qmart.QmartApplication`. You need Java 22 SDK to build and run.
-
-    >[!NOTE]
-    > The values provided in parenthesis are examples. You will need to fill in the blanks corresponding to your setup.
 
 3. Run the application. If there are no exceptions, then you have successfully set up the backend services. As you start using 
     the frontend application, incoming requests will be logged to the backend.
