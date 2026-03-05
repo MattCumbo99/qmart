@@ -1,7 +1,7 @@
 <h1 style="text-align: center">Quantum Mart Backend API</h1>
 
 ----
-<p style="text-align: center">
+<p align="center">
     <a href="https://spring.io/">
         <img src="https://img.shields.io/badge/Spring%20Boot-6DB33F?logo=springboot&logoColor=white" alt="Spring Boot"/>
     </a>
@@ -13,7 +13,7 @@
     </a>
 </p>
 
-<p style="text-align: center">
+<p align="center">
     A Spring Boot API service that powers the core features of Quantum Mart. Including users, orders, and product 
     listings.
 </p>
@@ -59,7 +59,7 @@ to manage the local database.
     ```
    Set the main class as `com.mattrition.qmart.QmartApplication`. You need Java 22 SDK to build and run.
 
-    > [!NOTE]
+    >[!NOTE]
     > The values provided in parenthesis are examples. You will need to fill in the blanks corresponding to your setup.
 
 3. Run the application. If there are no exceptions, then you have successfully set up the backend services. As you start using 
