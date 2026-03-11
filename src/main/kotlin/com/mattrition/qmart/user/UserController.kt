@@ -1,10 +1,12 @@
 package com.mattrition.qmart.user
 
+import com.mattrition.qmart.auth.CustomUserDetails
 import com.mattrition.qmart.user.dto.RegistrationInfo
 import com.mattrition.qmart.user.dto.UserDto
 import jakarta.annotation.security.RolesAllowed
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -31,6 +33,11 @@ class UserController(
     fun getUserById(
         @PathVariable id: UUID,
     ): UserDto = service.getUserById(id)
+
+    @GetMapping("/me")
+    fun getMyself(
+        @AuthenticationPrincipal user: CustomUserDetails,
+    ): UserDto = service.getUserById(user.id)
 
     @PostMapping
     fun createUser(

@@ -63,6 +63,13 @@ class UserControllerTest : BaseH2Test() {
         fun `should return 404 not found`() {
             mockRequest(GET, "$BASE_PATH/username=phantomUser210401").andExpect(status().isNotFound)
         }
+
+        @Test
+        fun `should retrieve current user`() {
+            mockRequest(requestType = GET, path = "$BASE_PATH/me", token = TestTokens.user)
+                .andExpect(status().isOk)
+                .andExpect(jsonPath("$.username").value(TestUsers.user.username))
+        }
     }
 
     @Nested
