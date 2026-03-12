@@ -15,14 +15,15 @@ on:
           - patch
 
 jobs:
-  create_tag:
-    name: Create tag
+  release:
+    name: Create new ${{ github.event.inputs.bump }} release
     runs-on: ubuntu-latest
-    outputs:
-      version: ${{ steps.newTag.outputs.version }}
-      prerelease: ${{ steps.newTag.outputs.prerelease }}
     steps:
       - uses: actions/checkout@v6
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 22
       - name: Construct new version name
         id: newTag
         run: |
@@ -53,32 +54,15 @@ jobs:
           else
             echo "prerelease=false" >> $GITHUB_OUTPUT
           fi
-      - name: Create and upload tag
-        run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
-          git tag v${{ steps.newTag.outputs.version }}
-          git push origin v${{ steps.newTag.outputs.version }}
-
-  release:
-    name: Publish new ${{ github.event.inputs.bump }} release
-    runs-on: ubuntu-latest
-    needs: create_tag
-    steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-java@v5
-        with:
-          distribution: temurin
-          java-version: 22
       - name: Build asset
         run: |
           chmod +x ./gradlew
-          ./gradlew clean build -Pversion=${{ needs.create_tag.outputs.version }}
-      - name: Create ${{ github.event.inputs.bump }} release
+          ./gradlew clean build -Pversion=${{ steps.newTag.outputs.version }}
+      - name: Upload new release
         run: |
-          gh release create v${{ needs.create_tag.outputs.version }} \
+          gh release create v${{ steps.newTag.outputs.version }} \
             --generate-notes \
-            --prerelease=${{ needs.create_tag.outputs.prerelease }} \
-            build/libs/qmart-${{ needs.create_tag.outputs.version }}.jar
+            --prerelease=${{ steps.newTag.outputs.prerelease }} \
+            build/libs/qmart-${{ steps.newTag.outputs.version }}.jar
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
