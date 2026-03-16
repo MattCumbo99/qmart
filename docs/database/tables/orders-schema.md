@@ -16,21 +16,21 @@
 ## 📄Schema
 - Table name: `orders`
 
-| Column Name        | Datatype        | Nullable  | Default             | Description                                    |
-|--------------------|-----------------|-----------|---------------------|------------------------------------------------|
-| id                 | PK `UUID`       | No        | `gen_random_uuid()` | Identifier for the order.                      |
-| buyer_id           | FK `UUID`       | No        |                     | User ID of the user who made the order.        |
-| status             | `VARCHAR(50)`   | No        | pending             | Status of the order.                           |
-| total_paid         | `NUMERIC(10,2)` | No        |                     | How much the buyer paid in total.              |
-| created_at         | `TIMESTAMP`     | No        | `now()`             | When the order was made.                       |
-| shipping_firstname | `VARCHAR(100)`  | No        |                     | First Name of the buyer.                       |
-| shipping_lastname  | `VARCHAR(100)`  | No        |                     | Last Name of the buyer.                        |
-| shipping_address1  | `VARCHAR(150)`  | No        |                     | Shipping address details: Street, number, etc. |
-| shipping_address2  | `VARCHAR(50)`   | Yes       | `null`              | Second part of the address, such as Apt 2.     |
-| shipping_city      | `VARCHAR(100)`  | No        |                     | City to ship the items to.                     |
-| shipping_state     | `VARCHAR(50)`   | No        |                     | U.S. State to ship the items to.               |
-| shipping_zip       | `VARCHAR(10)`   | No        |                     | ZIP code of the shipment.                      |
-| shipping_phone     | `VARCHAR(20)`   | No        |                     | Phone number associated with the order.        |
+| Column Name        | Datatype                   | Nullable  | Default             | Description                                    |
+|--------------------|----------------------------|-----------|---------------------|------------------------------------------------|
+| id                 | PK `UUID`                  | No        | `gen_random_uuid()` | Identifier for the order.                      |
+| buyer_id           | FK `UUID`                  | No        |                     | User ID of the user who made the order.        |
+| status             | `VARCHAR(50)`              | No        | pending             | Status of the order.                           |
+| total_paid         | `NUMERIC(10,2)`            | No        |                     | How much the buyer paid in total.              |
+| created_at         | `TIMESTAMP WITH TIME ZONE` | No        | `now()`             | When the order was made.                       |
+| shipping_firstname | `VARCHAR(100)`             | No        |                     | First Name of the buyer.                       |
+| shipping_lastname  | `VARCHAR(100)`             | No        |                     | Last Name of the buyer.                        |
+| shipping_address1  | `VARCHAR(150)`             | No        |                     | Shipping address details: Street, number, etc. |
+| shipping_address2  | `VARCHAR(50)`              | Yes       | `null`              | Second part of the address, such as Apt 2.     |
+| shipping_city      | `VARCHAR(100)`             | No        |                     | City to ship the items to.                     |
+| shipping_state     | `VARCHAR(50)`              | No        |                     | U.S. State to ship the items to.               |
+| shipping_zip       | `VARCHAR(10)`              | No        |                     | ZIP code of the shipment.                      |
+| shipping_phone     | `VARCHAR(20)`              | No        |                     | Phone number associated with the order.        |
 
 ## 🎯Purpose
 An **order** entity represents a finalized purchase initiated by a buyer. It captures the high‑level details of a 

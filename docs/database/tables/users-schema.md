@@ -16,15 +16,15 @@
 ## 📄Schema
 - Table name: `users`
 
-| Column Name   | Datatype        | Nullable | Default             | Description                       |
-|---------------|-----------------|----------|---------------------|-----------------------------------|
-| id            | PK `UUID`       | No       | `gen_random_uuid()` | Primary identifier for this user. |
-| username      | `VARCHAR(50)`   | No       |                     | Text identifier for the user.     |
-| password_hash | `VARCHAR(255)`  | No       |                     | The user's hashed password.       |
-| email         | `VARCHAR(255)`  | Yes      |                     | Email associated with this user.  |
-| balance       | `NUMERIC(12,2)` | No       | 1000.00             | Amount of currency this user has. |
-| role          | `VARCHAR(50)`   | No       | user                | Level of privilege this user has. |
-| created_at    | `TIMESTAMP`     | No       | `now()`             | When this user was created.       |
+| Column Name   | Datatype                   | Nullable | Default             | Description                       |
+|---------------|----------------------------|----------|---------------------|-----------------------------------|
+| id            | PK `UUID`                  | No       | `gen_random_uuid()` | Primary identifier for this user. |
+| username      | `VARCHAR(50)`              | No       |                     | Text identifier for the user.     |
+| password_hash | `VARCHAR(255)`             | No       |                     | The user's hashed password.       |
+| email         | `VARCHAR(255)`             | Yes      |                     | Email associated with this user.  |
+| balance       | `NUMERIC(12,2)`            | No       | 1000.00             | Amount of currency this user has. |
+| role          | `VARCHAR(50)`              | No       | user                | Level of privilege this user has. |
+| created_at    | `TIMESTAMP WITH TIME ZONE` | No       | `now()`             | When this user was created.       |
 
 ## 🎯Purpose
 Stores and provides information related to a client using the application.

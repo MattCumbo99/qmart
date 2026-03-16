@@ -29,6 +29,7 @@
 | listing_title       | `TEXT`                     | No       |                       | The listing's original title.                    |
 | listing_description | `TEXT`                     | Yes      |                       | The listing's original image URL.                |
 | shipped_on          | `TIMESTAMP WITH TIME ZONE` | Yes      |                       | When the item was shipped.                       |
+| completed_on        | `TIMESTAMP WITH TIME ZONE` | Yes      |                       | Date the item was marked as completed.           |
 
 ## 🎯Purpose
 Keeps track of individual items bought within an order.
@@ -39,6 +40,8 @@ When an order is created, all items from the user's **cart** will be added as or
 
 ### 🔄Row Updates
 - `status` changes when the seller manually sets the item as either _SHIPPED_ or _CANCELED_.
+- `status` is updated through a scheduled cron job at 10am server time. If the status is _SHIPPED_ and it was shipped at least 1
+   day ago, the status is changed to _COMPLETED_.
 - `shipped_on` receives a value when the **status** field changes to _SHIPPED_ for the first time.
 
 ### 🗑️Row Deletion
