@@ -1,0 +1,2 @@
+ALTER TABLE order_items
+    ADD COLUMN completed_on TIMESTAMP WITH TIME ZONE;

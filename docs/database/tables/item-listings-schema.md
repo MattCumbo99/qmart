@@ -16,16 +16,16 @@
 ## 📄Schema
 - Table name: `item_listings`
 
-| Column Name  | Datatype        | Nullable  | Default             | Description                        |
-|--------------|-----------------|-----------|---------------------|------------------------------------|
-| id           | PK `UUID`       | No        | `gen_random_uuid()` | Unique ID for the listing.         |
-| seller_id    | FK `UUID`       | No        |                     | User ID of user selling the item.  |
-| title        | `VARCHAR(200)`  | No        |                     | Name of the listing.               |
-| description  | `TEXT`          | Yes       |                     | Description of the listing.        |
-| price        | `NUMERIC(10,2)` | No        |                     | How much the item costs.           |
-| image_url    | `TEXT`          | Yes       |                     | Image URL of the product.          |
-| created_at   | `TIMESTAMP`     | No        | `now()`             | When the listing was created.      |
-| updated_at   | `TIMESTAMP`     | No        | `now()`             | When the listing was last updated. |
+| Column Name  | Datatype                    | Nullable  | Default             | Description                        |
+|--------------|-----------------------------|-----------|---------------------|------------------------------------|
+| id           | PK `UUID`                   | No        | `gen_random_uuid()` | Unique ID for the listing.         |
+| seller_id    | FK `UUID`                   | No        |                     | User ID of user selling the item.  |
+| title        | `VARCHAR(200)`              | No        |                     | Name of the listing.               |
+| description  | `TEXT`                      | Yes       |                     | Description of the listing.        |
+| price        | `NUMERIC(10,2)`             | No        |                     | How much the item costs.           |
+| image_url    | `TEXT`                      | Yes       |                     | Image URL of the product.          |
+| created_at   | `TIMESTAMP WITH TIME ZONE`  | No        | `now()`             | When the listing was created.      |
+| updated_at   | `TIMESTAMP WITH TIME ZONE`  | No        | `now()`             | When the listing was last updated. |
 
 ## 🎯Purpose
 Stores information on products currently being sold on Quantum Mart.

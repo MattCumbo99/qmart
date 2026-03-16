@@ -18,6 +18,7 @@ object OrderItemMapper {
             listingDescription = orderItem.listingDescription,
             listingImageUrl = orderItem.listingImageUrl,
             shippedOn = orderItem.shippedOn,
+            completedOn = orderItem.completedOn,
         )
 
     /** Converts a cart item DTO to an order item DTO. */

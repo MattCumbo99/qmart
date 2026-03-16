@@ -36,5 +36,6 @@ data class OrderItem(
     @Column(name = "listing_description") val listingDescription: String? = null,
     @Column(name = "listing_image_url") val listingImageUrl: String? = null,
     @Column(name = "shipped_on") var shippedOn: OffsetDateTime? = null,
+    @Column(name = "completed_on") var completedOn: OffsetDateTime? = null,
     @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "order_id") var order: Order? = null,
 )

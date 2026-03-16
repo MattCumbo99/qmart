@@ -18,4 +18,5 @@ data class OrderItemDto(
     val listingDescription: String? = null,
     val listingImageUrl: String? = null,
     val shippedOn: OffsetDateTime? = null,
+    val completedOn: OffsetDateTime? = null,
 )
