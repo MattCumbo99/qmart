@@ -13,17 +13,18 @@ jobs:
       - name: Check for relevant changes
         uses: ./.github/actions/detect-build-changes
         id: changes
-      - uses: actions/setup-java@v5
-        if: ${{ steps.changes.outputs.run_ci == 'true' }}
+      - if: ${{ steps.changes.outputs.run_ci == 'true' }}
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: 22
-      - run: chmod +x ./gradlew
-        if: ${{ steps.changes.outputs.run_ci == 'true' }}
-      - run: ./gradlew assemble --no-daemon
-        if: ${{ steps.changes.outputs.run_ci == 'true' }}
-      - name: Skip build
-        if: ${{ steps.changes.outputs.run_ci == 'false' }}
+      - if: ${{ steps.changes.outputs.run_ci == 'true' }}
+        name: Build artifact
+        run: |
+          chmod +x ./gradlew
+          ./gradlew assemble --no-daemon
+      - if: ${{ steps.changes.outputs.run_ci == 'false' }}
+        name: Skip build
         run: echo "Skipping build"
 
   test:
@@ -37,19 +38,19 @@ jobs:
       - name: Check for relevant changes
         uses: ./.github/actions/detect-build-changes
         id: changes
-      - uses: actions/setup-java@v5
-        if: ${{ steps.changes.outputs.run_ci == 'true' }}
+      - if: ${{ steps.changes.outputs.run_ci == 'true' }}
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: 22
-      - run: chmod +x ./gradlew
-        if: ${{ steps.changes.outputs.run_ci == 'true' }}
-      - run: echo "SPRING_PROFILES_ACTIVE=test" >> $GITHUB_ENV
-        if: ${{ steps.changes.outputs.run_ci == 'true' }}
-      - run: ./gradlew test --no-daemon
-        if: ${{ steps.changes.outputs.run_ci == 'true' }}
-      - name: Skip tests
-        if: ${{ steps.changes.outputs.run_ci == 'false' }}
+      - if: ${{ steps.changes.outputs.run_ci == 'true' }}
+        name: Run tests
+        run: |
+          echo "SPRING_PROFILES_ACTIVE=test" >> $GITHUB_ENV
+          chmod +x ./gradlew
+          ./gradlew test --no-daemon
+      - if: ${{ steps.changes.outputs.run_ci == 'false' }}
+        name: Skip tests
         run: echo "Skipping tests"
 
   spotless:
@@ -62,15 +63,16 @@ jobs:
       - name: Check for relevant changes
         uses: ./.github/actions/detect-build-changes
         id: changes
-      - uses: actions/setup-java@v5
-        if: ${{ steps.changes.outputs.run_ci == 'true' }}
+      - if: ${{ steps.changes.outputs.run_ci == 'true' }}
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: 22
-      - run: chmod +x ./gradlew
-        if: ${{ steps.changes.outputs.run_ci == 'true' }}
-      - run: ./gradlew spotlessCheck --no-daemon
-        if: ${{ steps.changes.outputs.run_ci == 'true' }}
-      - name: Skip spotless
-        if: ${{ steps.changes.outputs.run_ci == 'false' }}
+      - if: ${{ steps.changes.outputs.run_ci == 'true' }}
+        name: Run spotless check
+        run: |
+          chmod +x ./gradlew
+          ./gradlew spotlessCheck --no-daemon
+      - if: ${{ steps.changes.outputs.run_ci == 'false' }}
+        name: Skip spotless
         run: echo "Skipping spotless check"
