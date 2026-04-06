@@ -11,12 +11,12 @@ import java.util.UUID
 
 @Entity
 @Table(name = "addresses")
-data class Address(
+class Address(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false)
-    val id: UUID? = null,
-    @Column(name = "user_id", nullable = false) val userId: UUID,
+    var id: UUID? = null,
+    @Column(name = "user_id", nullable = false) var userId: UUID,
     @Column(name = "is_primary", nullable = false) var isPrimary: Boolean = false,
     @Column(name = "first_name", nullable = false) var firstName: String,
     @Column(name = "last_name", nullable = false) var lastName: String,
@@ -27,5 +27,5 @@ data class Address(
     @Column(nullable = false) var zip: String,
     @Column(nullable = false) var phone: String,
     @Column(name = "created_at", nullable = false)
-    val createdAt: OffsetDateTime = OffsetDateTime.now(),
+    var createdAt: OffsetDateTime = OffsetDateTime.now(),
 )

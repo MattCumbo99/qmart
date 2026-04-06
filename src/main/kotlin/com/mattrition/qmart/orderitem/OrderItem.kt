@@ -18,23 +18,23 @@ import java.util.UUID
 
 @Entity
 @Table(name = "order_items")
-data class OrderItem(
+class OrderItem(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false)
-    val id: UUID? = null,
-    @Column(name = "listing_id", nullable = false) val listingId: UUID? = null,
-    @Column(name = "seller_id", nullable = false) val sellerId: UUID? = null,
-    @Column(nullable = false) val quantity: Int = 0,
+    var id: UUID? = null,
+    @Column(name = "listing_id", nullable = false) var listingId: UUID,
+    @Column(name = "seller_id", nullable = false) var sellerId: UUID,
+    @Column(nullable = false) var quantity: Int = 0,
     @Column(name = "listing_price", nullable = false)
-    val listingPrice: BigDecimal = BigDecimal.ZERO,
+    var listingPrice: BigDecimal = BigDecimal.ZERO,
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     var status: OrderItemStatus = OrderItemStatus.PAID_PENDING_SHIPMENT,
-    @Column(name = "paid_at", nullable = false) val paidAt: OffsetDateTime = OffsetDateTime.now(),
-    @Column(name = "listing_title", nullable = false) val listingTitle: String = "",
-    @Column(name = "listing_description") val listingDescription: String? = null,
-    @Column(name = "listing_image_url") val listingImageUrl: String? = null,
+    @Column(name = "paid_at", nullable = false) var paidAt: OffsetDateTime = OffsetDateTime.now(),
+    @Column(name = "listing_title", nullable = false) var listingTitle: String,
+    @Column(name = "listing_description") var listingDescription: String? = null,
+    @Column(name = "listing_image_url") var listingImageUrl: String? = null,
     @Column(name = "shipped_on") var shippedOn: OffsetDateTime? = null,
     @Column(name = "completed_on") var completedOn: OffsetDateTime? = null,
     @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "order_id") var order: Order? = null,
