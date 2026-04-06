@@ -20,34 +20,36 @@ class AddressControllerTest : BaseH2Test() {
         private const val BASE_PATH = "/api/address"
     }
 
-    private lateinit var sampleAddress: Address
+    private fun generateAddress(isPrimary: Boolean = false) =
+        Address(
+            userId = TestUsers.user.id!!,
+            isPrimary = isPrimary,
+            firstName = "test",
+            lastName = "test",
+            city = "test",
+            state = "test",
+            zip = "12345",
+            addressLine1 = "555 Quahog",
+            phone = "555-555-5555",
+        )
+
+    private lateinit var sampleAddress1: Address
+    private lateinit var sampleAddress2: Address
 
     @Autowired lateinit var addressRepository: AddressRepository
 
     @BeforeEach
     fun beforeEach() {
-        sampleAddress =
-            Address(
-                userId = TestUsers.user.id!!,
-                firstName = "test",
-                lastName = "test",
-                city = "test",
-                state = "test",
-                zip = "12345",
-                addressLine1 = "555 Quahog",
-                phone = "555-555-5555",
-            )
+        sampleAddress1 = generateAddress(isPrimary = true)
+        sampleAddress2 = generateAddress()
     }
 
     @Nested
     inner class GetAddress {
         @BeforeEach
         fun addAddress() {
-            addressRepository.save(sampleAddress.copy(isPrimary = true))
-
-            val secondary = sampleAddress.copy(isPrimary = false, firstName = "mike")
-
-            addressRepository.save(secondary)
+            addressRepository.save(sampleAddress1)
+            addressRepository.save(sampleAddress2)
 
             addressRepository.findAll().shouldHaveSize(2)
         }
@@ -96,19 +98,19 @@ class AddressControllerTest : BaseH2Test() {
                 requestType = HttpMethod.POST,
                 path = BASE_PATH,
                 token = null,
-                body = AddressMapper.toDto(sampleAddress),
+                body = AddressMapper.toDto(sampleAddress1),
             ).andExpect(status().isForbidden)
         }
 
         @Test
         fun `should create address and set as primary`() {
-            sampleAddress.isPrimary shouldBe false
+            sampleAddress2.isPrimary shouldBe false
 
             mockRequest(
                 requestType = HttpMethod.POST,
                 path = BASE_PATH,
                 token = TestTokens.user,
-                body = AddressMapper.toDto(sampleAddress),
+                body = AddressMapper.toDto(sampleAddress2),
             ).andExpect(status().isCreated)
 
             val addresses = addressRepository.findByUserIdSorted(TestUsers.user.id!!)
@@ -120,7 +122,7 @@ class AddressControllerTest : BaseH2Test() {
 
         @Test
         fun `should return 400 bad request when creating another primary address`() {
-            addressRepository.save(sampleAddress.copy(isPrimary = true))
+            addressRepository.save(sampleAddress1)
 
             val userAddresses = addressRepository.findByUserIdSorted(TestUsers.user.id!!)
             userAddresses shouldHaveSize 1
@@ -130,7 +132,7 @@ class AddressControllerTest : BaseH2Test() {
                 requestType = HttpMethod.POST,
                 path = BASE_PATH,
                 token = TestTokens.user,
-                body = AddressMapper.toDto(sampleAddress.copy(isPrimary = true)),
+                body = AddressMapper.toDto(sampleAddress1),
             ).andExpect(status().isBadRequest)
         }
     }
@@ -141,7 +143,7 @@ class AddressControllerTest : BaseH2Test() {
 
         @BeforeEach
         fun addAddress() {
-            savedAddress = addressRepository.save(sampleAddress.copy(isPrimary = true))
+            savedAddress = addressRepository.save(sampleAddress1)
         }
 
         @Test
@@ -162,7 +164,8 @@ class AddressControllerTest : BaseH2Test() {
         @Test
         fun `should delete address and update primary`() {
             addressRepository.findById(savedAddress.id!!).getOrNull().shouldNotBeNull()
-            val secondary = addressRepository.save(sampleAddress.copy(isPrimary = false))
+
+            val secondary = addressRepository.save(sampleAddress2)
 
             fun addresses() = addressRepository.findByUserIdSorted(TestUsers.user.id!!)
             addresses() shouldHaveSize 2

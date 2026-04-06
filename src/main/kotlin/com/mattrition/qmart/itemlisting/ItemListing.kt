@@ -12,13 +12,13 @@ import java.util.UUID
 
 @Entity
 @Table(name = "item_listings")
-data class ItemListing(
-    @Id @GeneratedValue(strategy = GenerationType.AUTO) val id: UUID? = null,
-    @Column(name = "seller_id", nullable = false) val sellerId: UUID? = null,
-    val title: String = "",
-    val description: String = "",
-    val price: BigDecimal = BigDecimal.ZERO,
-    @Column(name = "image_url") val imageUrl: String? = null,
-    @Column(name = "created_at") val createdAt: OffsetDateTime = OffsetDateTime.now(),
-    @Column(name = "updated_at") val updatedAt: OffsetDateTime = OffsetDateTime.now(),
+class ItemListing(
+    @Id @GeneratedValue(strategy = GenerationType.AUTO) var id: UUID? = null,
+    @Column(name = "seller_id", nullable = false) var sellerId: UUID? = null,
+    var title: String = "",
+    var description: String = "",
+    var price: BigDecimal = BigDecimal.ZERO,
+    @Column(name = "image_url") var imageUrl: String? = null,
+    @Column(name = "created_at") var createdAt: OffsetDateTime = OffsetDateTime.now(),
+    @Column(name = "updated_at") var updatedAt: OffsetDateTime = OffsetDateTime.now(),
 )

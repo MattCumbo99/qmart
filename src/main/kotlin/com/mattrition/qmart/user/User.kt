@@ -23,16 +23,16 @@ import java.util.UUID
  */
 @Entity
 @Table(name = "users")
-data class User(
+class User(
     @Id
     @Column(nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
-    val id: UUID? = null,
-    @Column(nullable = false) val username: String = "",
-    @Column(name = "password_hash", nullable = false) val passwordHash: String = "",
+    var id: UUID? = null,
+    @Column(nullable = false) var username: String = "",
+    @Column(name = "password_hash", nullable = false) var passwordHash: String = "",
     @Column(name = "created_at", nullable = false)
-    val createdAt: OffsetDateTime = OffsetDateTime.now(),
-    val email: String? = null,
+    var createdAt: OffsetDateTime = OffsetDateTime.now(),
+    var email: String? = null,
     @Column(nullable = false) var balance: BigDecimal = BigDecimal(1000),
-    @Column(nullable = false) val role: String = UserRole.USER.lowercase(),
+    @Column(nullable = false) var role: String = UserRole.USER.lowercase(),
 )

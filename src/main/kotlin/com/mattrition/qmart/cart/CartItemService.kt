@@ -79,12 +79,13 @@ class CartItemService(
             )
         } else {
             // Update the existing item by adding the requested quantity to it
-            val updatedQuantity = existingItem.quantity + itemQuantity
-            val newCartItem = cartItemRepo.save(existingItem.copy(quantity = updatedQuantity))
+            existingItem.quantity += itemQuantity
+
+            val newCartItem = cartItemRepo.save(existingItem)
 
             CartItemWithListingDto(
                 cartItemId = newCartItem.id!!,
-                quantity = updatedQuantity,
+                quantity = existingItem.quantity,
                 itemListing = listingDto,
             )
         }

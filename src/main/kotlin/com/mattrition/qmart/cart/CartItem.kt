@@ -10,12 +10,12 @@ import java.util.UUID
 
 @Entity
 @Table(name = "cart_items")
-data class CartItem(
+class CartItem(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false)
-    val id: UUID? = null,
-    @Column("user_id") val userId: UUID? = null,
-    @Column("listing_id") val listingId: UUID? = null,
-    val quantity: Int = 1,
+    var id: UUID? = null,
+    @Column("user_id") var userId: UUID? = null,
+    @Column("listing_id") var listingId: UUID? = null,
+    var quantity: Int = 1,
 )
