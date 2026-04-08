@@ -16,17 +16,18 @@
 ## 📄Schema
 - Table name: `item_listings`
 
-| Column Name | Datatype                   | Nullable | Default             | Description                        |
-|-------------|----------------------------|----------|---------------------|------------------------------------|
-| id          | PK `UUID`                  | No       | `gen_random_uuid()` | Unique ID for the listing.         |
-| seller_id   | FK `UUID`                  | No       |                     | User ID of user selling the item.  |
-| title       | `VARCHAR(200)`             | No       |                     | Name of the listing.               |
-| description | `TEXT`                     | Yes      |                     | Description of the listing.        |
-| price       | `NUMERIC(10,2)`            | No       |                     | How much the item costs.           |
-| image_url   | `TEXT`                     | Yes      |                     | Image URL of the product.          |
-| created_at  | `TIMESTAMP WITH TIME ZONE` | No       | `now()`             | When the listing was created.      |
-| updated_at  | `TIMESTAMP WITH TIME ZONE` | No       | `now()`             | When the listing was last updated. |
-| is_active   | `BOOLEAN`                  | No       | true                | If the listing is for sale.        |
+| Column Name     | Datatype                   | Nullable | Default             | Description                        |
+|-----------------|----------------------------|----------|---------------------|------------------------------------|
+| id              | PK `UUID`                  | No       | `gen_random_uuid()` | Unique ID for the listing.         |
+| seller_id       | FK `UUID`                  | No       |                     | User ID of user selling the item.  |
+| title           | `VARCHAR(200)`             | No       |                     | Name of the listing.               |
+| description     | `TEXT`                     | Yes      |                     | Description of the listing.        |
+| price           | `NUMERIC(10,2)`            | No       |                     | How much the item costs.           |
+| image_url       | `TEXT`                     | Yes      |                     | Image URL of the product.          |
+| created_at      | `TIMESTAMP WITH TIME ZONE` | No       | `now()`             | When the listing was created.      |
+| updated_at      | `TIMESTAMP WITH TIME ZONE` | No       | `now()`             | When the listing was last updated. |
+| is_active       | `BOOLEAN`                  | No       | true                | If the listing is for sale.        |
+| quantity_sold   | `INTEGER`                  | No       | 0                   | Amount sold.                       |
 
 ## 🎯Purpose
 Stores information on products currently being sold on Quantum Mart.
@@ -36,7 +37,8 @@ Stores information on products currently being sold on Quantum Mart.
 When a logged-in user submits a form containing information for a new item listing.
 
 ### 🔄Row Updates
-Users can update their item listings any time by setting a new title, description, price, or if it is active.
+Users can update their item listings any time by setting a new title, description, price, or if it is active. Quantity 
+sold is incremented only when an order item with this listing is marked as **completed**.
 
 ### 🗑️Row Deletion
 No entries are hard-deleted. They are set to "not active" and instead is removed visibly except from the seller.
@@ -52,6 +54,7 @@ No entries are hard-deleted. They are set to "not active" and instead is removed
 ## 🔒Invariants
 1. `price` must be a number greater than zero.
 2. `seller_id` must always point to a valid user `id`. The row is deleted automatically otherwise.
+3. `quantity_sold` is always a positive number.
 
 ## 🔍Access Patterns
 - Fetch item listings by `seller_id`.
