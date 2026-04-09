@@ -4,6 +4,8 @@ import com.mattrition.qmart.cart.CartItemService
 import com.mattrition.qmart.exception.BadRequestException
 import com.mattrition.qmart.exception.ForbiddenException
 import com.mattrition.qmart.exception.NotFoundException
+import com.mattrition.qmart.itemlisting.dto.ItemListingDto
+import com.mattrition.qmart.notification.NotificationService
 import com.mattrition.qmart.order.dto.OrderDto
 import com.mattrition.qmart.order.mapper.OrderMapper
 import com.mattrition.qmart.orderitem.OrderItemRepository
@@ -21,6 +23,7 @@ class OrderService(
     private val userRepository: UserRepository,
     private val cartItemService: CartItemService,
     private val balanceService: BalanceService,
+    private val notificationService: NotificationService,
 ) {
     /** Retrieves all orders bought by a specified user. */
     fun getOrdersBoughtBy(buyerId: UUID): List<OrderDto> = orderRepository.findOrdersByBuyerId(buyerId).map { OrderMapper.toDto(it) }
@@ -89,6 +92,10 @@ class OrderService(
 
             itemEntity.order = orderEntity
             orderEntity.orderItems.add(itemEntity)
+
+            // Send notification to seller
+            val sellerId = cartItem.itemListing.sellerId
+            notifySeller(sellerId, cartItem.itemListing)
         }
 
         val savedOrder = orderRepository.save(orderEntity)
@@ -97,5 +104,17 @@ class OrderService(
         cartItemService.deleteCartItemsByUserId(orderInfo.buyerId)
 
         return OrderMapper.toDto(savedOrder)
+    }
+
+    /** Sends a notification to the seller telling them their item was sold. */
+    private fun notifySeller(
+        sellerId: UUID,
+        listing: ItemListingDto,
+    ) {
+        notificationService.createNotification(
+            userId = sellerId,
+            message = "Your item ${listing.title} has sold!",
+            route = "/listing/${listing.id!!}",
+        )
     }
 }
