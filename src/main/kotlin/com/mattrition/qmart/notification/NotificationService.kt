@@ -66,13 +66,9 @@ class NotificationService(
         notificationRepository.save(notif)
     }
 
-    /**
-     * Hides all active notifications for a user.
-     */
+    /** Hides all active notifications for a user. */
     fun hideAllNotifications(userId: UUID) {
-        notificationRepository.findByUser(userId).forEach { notif ->
-            hideNotification(notif.id!!)
-        }
+        notificationRepository.findByUser(userId).forEach { notif -> hideNotification(notif.id!!) }
     }
 
     private fun getNotification(id: UUID) =
