@@ -1,17 +1,21 @@
 package com.mattrition.qmart.jobs
 
 import com.mattrition.qmart.itemlisting.ItemListingService
+import com.mattrition.qmart.notification.NotificationService
+import com.mattrition.qmart.orderitem.OrderItem
 import com.mattrition.qmart.orderitem.OrderItemRepository
 import com.mattrition.qmart.orderitem.OrderItemStatus
 import org.slf4j.LoggerFactory
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
 import java.time.OffsetDateTime
+import java.util.UUID
 
 @Service
 class OrderItemAutoCompleteJob(
     private val orderItemRepository: OrderItemRepository,
     private val itemListingService: ItemListingService,
+    private val notificationService: NotificationService,
 ) {
     private val log = LoggerFactory.getLogger(OrderItemAutoCompleteJob::class.java)
 
@@ -32,10 +36,24 @@ class OrderItemAutoCompleteJob(
 
             // Increase the amount sold by the quantity
             itemListingService.incrementSold(item.listingId, item.quantity)
+
+            item.order?.buyerId?.let { notifyBuyer(it, item) }
         }
 
         orderItemRepository.saveAll(itemsToComplete)
 
         log.info("AutoCompleteJob completed")
+    }
+
+    private fun notifyBuyer(
+        buyerId: UUID,
+        orderItem: OrderItem,
+    ) {
+        notificationService.createNotification(
+            userId = buyerId,
+            message = "Item ${orderItem.listingTitle} was delivered!",
+            // TODO This should route the user to the individual order containing this item
+            route = "/purchases",
+        )
     }
 }
