@@ -6,8 +6,8 @@ import com.mattrition.qmart.notification.NotificationService
 import com.mattrition.qmart.orderitem.dto.OrderItemDto
 import com.mattrition.qmart.orderitem.mapper.OrderItemMapper
 import com.mattrition.qmart.util.authPrincipal
-import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.time.OffsetDateTime
 import java.util.UUID
 
@@ -36,16 +36,15 @@ class OrderItemService(
         ensureStatusCanChange(orderItem.status)
         ensureNewStatusIsAllowed(newStatus)
 
-        if (newStatus == OrderItemStatus.SHIPPED) {
-            orderItem.shippedOn = OffsetDateTime.now()
-        }
-
         orderItem.status = newStatus
 
-        val orderItemDto = OrderItemMapper.toDto(orderItem)
+        if (newStatus == OrderItemStatus.SHIPPED) {
+            orderItem.shippedOn = OffsetDateTime.now()
 
-        val buyerId = authPrincipal().id
-        notifyBuyer(buyerId, orderItemDto)
+            orderItem.order?.let { notifyBuyer(it.buyerId, OrderItemMapper.toDto(orderItem)) }
+        }
+
+        val orderItemDto = OrderItemMapper.toDto(orderItem)
 
         return orderItemDto
     }
