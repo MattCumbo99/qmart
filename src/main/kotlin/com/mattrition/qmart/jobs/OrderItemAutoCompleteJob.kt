@@ -8,6 +8,7 @@ import com.mattrition.qmart.orderitem.OrderItemStatus
 import org.slf4j.LoggerFactory
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.time.OffsetDateTime
 import java.util.UUID
 
@@ -19,6 +20,7 @@ class OrderItemAutoCompleteJob(
 ) {
     private val log = LoggerFactory.getLogger(OrderItemAutoCompleteJob::class.java)
 
+    @Transactional
     @Scheduled(cron = $$"${jobs.autoComplete.cron}")
     fun autoCompleteShippedOrders() {
         log.info("AutoCompleteJob started")
