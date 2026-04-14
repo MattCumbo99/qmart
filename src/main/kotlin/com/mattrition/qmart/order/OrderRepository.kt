@@ -5,6 +5,13 @@ import org.springframework.data.jpa.repository.Query
 import java.util.UUID
 
 interface OrderRepository : JpaRepository<Order, UUID> {
+    @Query(
+        """
+            SELECT o FROM Order o
+            WHERE o.buyerId = :userId
+            ORDER BY o.createdAt DESC
+    """,
+    )
     fun findOrdersByBuyerId(userId: UUID): List<Order>
 
     @Query(
