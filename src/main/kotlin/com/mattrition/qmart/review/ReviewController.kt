@@ -1,12 +1,15 @@
 package com.mattrition.qmart.review
 
 import com.mattrition.qmart.review.dto.CreateReviewRequest
+import com.mattrition.qmart.review.dto.EditReviewRequest
 import com.mattrition.qmart.review.dto.ReviewDto
 import com.mattrition.qmart.user.UserRole
 import jakarta.annotation.security.RolesAllowed
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -22,12 +25,12 @@ class ReviewController(
     @GetMapping("/listing/{listingId}")
     fun getReviews(
         @PathVariable listingId: UUID,
-    ) = reviewService.getListingReviews(listingId)
+    ): List<ReviewDto> = reviewService.getListingReviews(listingId)
 
     @GetMapping("/user/{userId}")
     fun getUserReviews(
         @PathVariable userId: UUID,
-    ) = reviewService.getReviewsByUser(userId)
+    ): List<ReviewDto> = reviewService.getReviewsByUser(userId)
 
     @PostMapping("/listing/{listingId}")
     @RolesAllowed(UserRole.USER)
@@ -39,4 +42,17 @@ class ReviewController(
 
         return ResponseEntity(review, HttpStatus.CREATED)
     }
+
+    @PatchMapping("/{reviewId}")
+    @RolesAllowed(UserRole.USER)
+    fun updateReview(
+        @PathVariable reviewId: UUID,
+        @RequestBody request: EditReviewRequest,
+    ): ResponseEntity<ReviewDto> = reviewService.editReview(reviewId, request)
+
+    @DeleteMapping("/{reviewId}")
+    @RolesAllowed(UserRole.USER)
+    fun deleteReview(
+        @PathVariable reviewId: UUID,
+    ): ResponseEntity<Void> = reviewService.deleteReview(reviewId)
 }

@@ -7,11 +7,15 @@ import com.mattrition.qmart.exception.NotFoundException
 import com.mattrition.qmart.itemlisting.ItemListing
 import com.mattrition.qmart.itemlisting.ItemListingRepository
 import com.mattrition.qmart.review.dto.CreateReviewRequest
+import com.mattrition.qmart.review.dto.EditReviewRequest
 import com.mattrition.qmart.review.dto.ReviewDto
 import com.mattrition.qmart.review.mapper.ReviewMapper
 import com.mattrition.qmart.user.UserRepository
 import com.mattrition.qmart.util.authPrincipal
+import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
+import java.time.OffsetDateTime
 import java.util.UUID
 import kotlin.jvm.optionals.getOrElse
 
@@ -31,6 +35,7 @@ class ReviewService(
     fun getReviewsByUser(userId: UUID) = reviewRepository.findReviewsByUserId(userId).map { ReviewMapper.toDto(it) }
 
     /** Saves a review to the database. */
+    @Transactional
     fun createReview(
         request: CreateReviewRequest,
         listingId: UUID,
@@ -56,7 +61,115 @@ class ReviewService(
 
         val saved = reviewRepository.save(reviewEntity)
 
+        // Adjust review data on the item listing
+        val prevCount = listing.reviewCount
+        val prevAvg = listing.averageScore.toDouble()
+
+        val newAvg = ((prevAvg * prevCount) + request.score) / (prevCount + 1)
+
+        listing.reviewCount += 1
+        listing.averageScore = newAvg.toBigDecimal()
+
         return ReviewMapper.toDto(saved)
+    }
+
+    /**
+     * Modifies a review entity in the database.
+     *
+     * @param reviewId ID of the review to edit
+     * @param request Entry data to patch in
+     * @return Response entity with the new review information.
+     */
+    @Transactional
+    fun editReview(
+        reviewId: UUID,
+        request: EditReviewRequest,
+    ): ResponseEntity<ReviewDto> {
+        val review =
+            reviewRepository.findById(reviewId).getOrElse {
+                throw NotFoundException("Review $reviewId not found.")
+            }
+
+        val authUser = authPrincipal()
+        if (review.user.id != authUser.id) {
+            throw ForbiddenException("Forbidden.")
+        }
+
+        // Cancel transaction if no new changes are submitted
+        if (isEditableNotChanged(request, review)) {
+            return ResponseEntity.noContent().build()
+        }
+
+        request.newBody?.let { review.body = it }
+        request.newScore?.let { newScore ->
+            // Adjust the listing with the new score
+            val listing = itemListingRepository.findById(review.listingId).get()
+
+            val reviewCount = listing.reviewCount
+            val prevAvg = listing.averageScore.toDouble()
+            val prevScore = review.score
+
+            val newAvg = ((prevAvg * reviewCount) - prevScore + newScore) / reviewCount
+
+            review.score = newScore
+
+            listing.averageScore = newAvg.toBigDecimal()
+            itemListingRepository.save(listing)
+        }
+
+        review.isEdited = true
+        review.updatedAt = OffsetDateTime.now()
+
+        reviewRepository.save(review)
+
+        return ResponseEntity.ok(ReviewMapper.toDto(review))
+    }
+
+    @Transactional
+    fun deleteReview(reviewId: UUID): ResponseEntity<Void> {
+        val review =
+            reviewRepository.findById(reviewId).getOrElse {
+                throw NotFoundException("Review $reviewId not found.")
+            }
+
+        val authUser = authPrincipal()
+        if (review.user.id != authUser.id) {
+            throw ForbiddenException("Forbidden.")
+        }
+
+        reviewRepository.deleteById(review.id!!)
+
+        // Update the average score on the item listing
+        val listing = itemListingRepository.findById(review.listingId).get()
+
+        val prevAvg = listing.averageScore.toDouble()
+        val prevCount = listing.reviewCount
+        val removedScore = review.score
+
+        val newCount = prevCount - 1
+        val newAvg =
+            if (newCount == 0) {
+                0.0
+            } else {
+                ((prevAvg * prevCount) - removedScore) / newCount
+            }
+
+        listing.reviewCount = newCount
+        listing.averageScore = newAvg.toBigDecimal()
+
+        itemListingRepository.save(listing)
+
+        return ResponseEntity.noContent().build()
+    }
+
+    private fun isEditableNotChanged(
+        request: EditReviewRequest,
+        review: Review,
+    ): Boolean {
+        val bodyChanged = request.newBody != null && request.newBody != review.body
+        val scoreChanged = request.newScore != null && request.newScore != review.score
+
+        return !bodyChanged && !scoreChanged
     }
 
     /** Runs a bunch of checks to ensure the authenticated user can create the review. */
